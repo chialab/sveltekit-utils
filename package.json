@@ -10,14 +10,14 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"default": "./dist/index.js",
-			"svelte": "./dist/index.js"
+			"svelte": "./dist/index.js",
+			"default": "./dist/index.js"
 		},
 		"./server": {
 			"types": "./dist/server/index.d.ts",
 			"node": "./dist/server/index.js",
-			"default": null,
-			"svelte": null
+			"svelte": null,
+			"default": null
 		},
 		"./logger": {
 			"types": "./dist/logger.d.ts",
