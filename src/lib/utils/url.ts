@@ -1,3 +1,8 @@
+import { error } from '@sveltejs/kit';
+
+/** An URL with `https://` protocol. */
+export type HttpsUrl = `https://${string}`;
+
 /**
  * Check if URL is "internal" relative to a base URL.
  *
@@ -68,4 +73,35 @@ export const withQueryParams = (base: URL | string, params: EncodableQueryParams
 	);
 
 	return url;
+};
+
+/**
+ * Get required parameters from a Map-like structure.
+ *
+ * @param params Map-like structure where parameters can be `get()` from.
+ * @param requiredParams List of required parameters.
+ * @example
+ * ```ts
+ * import { getRequiredParams } from '@chialab/sveltekit-utils';
+ *
+ * const { foo, bar } = getRequiredParams(url.searchParams, ['foo', 'bar']);
+ * ```
+ */
+export const getRequiredParams = <T extends string>(
+	params: { get(name: T): string | null | undefined },
+	requiredParams: readonly T[],
+): Record<T, string> => {
+	const extracted = requiredParams.reduce<Partial<Record<T, string | null>>>(
+		(store, name) => ({
+			...store,
+			[name]: params.get(name),
+		}),
+		{},
+	);
+	const missingParams = requiredParams.filter((name) => !extracted[name]);
+	if (missingParams.length) {
+		error(400, `The following mandatory parameters are missing or empty: ${missingParams.join(', ')}`);
+	}
+
+	return extracted as Record<T, string>;
 };
