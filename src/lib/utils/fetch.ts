@@ -22,7 +22,7 @@ export const handleFetchError =
 		}
 
 		const status = err.cause.status;
-		const headers = { ...err.cause.headers };
+		const headers = Object.fromEntries(err.cause.headers.entries());
 		if (status === 404) {
 			logger.warn({ status, headers, ...additionalInfo }, 'Resource not found');
 
@@ -89,7 +89,7 @@ export const backoffRetry = async <T>(
 			break;
 		}
 
-		await timeout(sleep(attempt));
+		await timeout(sleep(attempt - 1));
 	}
 
 	return undefined;
