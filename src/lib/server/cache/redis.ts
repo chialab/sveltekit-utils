@@ -9,7 +9,7 @@ import {
 } from 'redis';
 import { logger } from '../../logger.js';
 import { BaseCache } from './base.js';
-import { createJitter, JitterMode, type JitterFn } from '../../utils.js';
+import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
 
 type RedisCacheOptions = {
 	keyPrefix?: string;

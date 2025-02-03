@@ -1,4 +1,4 @@
-import { createJitter, JitterMode, type JitterFn } from '../../utils.js';
+import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
 import { BaseCache } from './base.js';
 
 type ValueWrapper<T> = { value: T; expire: number | undefined };

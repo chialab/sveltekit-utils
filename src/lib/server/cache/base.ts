@@ -1,4 +1,4 @@
-import type { JitterFn, JitterMode } from '../../utils.js';
+import type { JitterFn, JitterMode } from '../../utils/misc.js';
 
 /**
  * Base class for caching.
