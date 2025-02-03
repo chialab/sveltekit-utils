@@ -42,7 +42,8 @@
 		"eslint-fix": "eslint --fix --ignore-path .gitignore . --ext .js,.cjs,.ts,.svelte",
 		"prettier-check": "prettier --check \"./**/*.{json,css,js,cjs,ts,svelte}\"",
 		"prettier-fix": "prettier --write \"./**/*.{json,css,js,cjs,ts,svelte}\"",
-		"lint-fix-all": "yarn eslint-fix && yarn prettier-fix"
+		"lint": "yarn run check && yarn run eslint-check && yarn run prettier-fix",
+		"lint-fix-all": "yarn run eslint-fix && yarn run prettier-fix"
 	},
 	"dependencies": {
 		"cookie": "^1.0.2",
