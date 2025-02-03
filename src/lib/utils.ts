@@ -18,7 +18,7 @@ export type ArrayItem<T> = Readonly<T> extends readonly (infer U)[] ? U : never;
  */
 export const handleFetchError =
 	(additionalInfo: Record<string, unknown> = {}) =>
-	(err: unknown) => {
+	(err: unknown): never => {
 		if (!(err instanceof Error && err.cause instanceof Response)) {
 			logger.error({ err, ...additionalInfo }, 'Unknown error');
 
@@ -139,7 +139,7 @@ export const lazyLoad = <T>(
  */
 export const getRequiredParams = <T extends string>(
 	params: { get(name: T): string | null | undefined },
-	requiredParams: T[],
+	requiredParams: readonly T[],
 ): Record<T, string> => {
 	const extracted = requiredParams.reduce<Partial<Record<T, string | null>>>(
 		(store, name) => ({
@@ -202,7 +202,7 @@ export const backoffRetry = async <T>(
 	factory: () => T | undefined | PromiseLike<T | undefined>,
 	baseMs = 500,
 	capMs = 10_000,
-	maxAttempts = Infinity,
+	maxAttempts: number = Infinity,
 	jitterMode: JitterMode | JitterFn = JitterMode.Full,
 ): Promise<Awaited<T> | undefined> => {
 	const jitter = createJitter(jitterMode);
@@ -255,7 +255,11 @@ const identity = (a: unknown, b: unknown) => a === b;
  * // ]
  * ```
  */
-export const group = <T, K>(items: T[], cb: (item: T) => K | K[], cmp: (a: K, b: K) => boolean = identity) =>
+export const group = <T, K>(
+	items: T[],
+	cb: (item: T) => K | K[],
+	cmp: (a: K, b: K) => boolean = identity,
+): { key: K; items: T[] }[] =>
 	items.reduce<{ key: K; items: T[] }[]>((grouped, item) => {
 		const keys = cb(item);
 		for (const key of Array.isArray(keys) ? keys : [keys]) {
@@ -391,15 +395,12 @@ export const isPromiseLike = (value: unknown): value is PromiseLike<unknown> =>
 /**
  * Check if is a mobile device.
  */
-export const isMobile = () => {
-	return (
-		// @ts-expect-error User Agent Data APIs are experimental.
-		navigator.userAgentData?.mobile ??
-		(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini/i.test(navigator.userAgent) ||
-			'ontouchstart' in window ||
-			navigator.maxTouchPoints > 0)
-	);
-};
+export const isMobile = (): boolean =>
+	// @ts-expect-error User Agent Data APIs are experimental.
+	navigator.userAgentData?.mobile ??
+	(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini/i.test(navigator.userAgent) ||
+		'ontouchstart' in window ||
+		navigator.maxTouchPoints > 0);
 
 /** Like {@see Object.entries}, but with less type pain. */
 export const entries = <T extends Parameters<typeof Object.entries>[0]>(obj: T) =>

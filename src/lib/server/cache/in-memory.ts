@@ -15,7 +15,7 @@ export class InMemoryCache<V> extends BaseCache<V> {
 	readonly #options: InMemoryCacheOptions;
 	readonly #inner: Map<string, ValueWrapper<V>> = new Map();
 
-	public static init<V>(options: InMemoryCacheOptions) {
+	public static init<V>(options: InMemoryCacheOptions): InMemoryCache<V> {
 		return new this<V>(options);
 	}
 
