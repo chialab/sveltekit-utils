@@ -8,12 +8,6 @@ Package is distribuited as NPM packages through the official NPM registry.
 
 ### Install
 
-As long as the project is private, you must login to the NPM registry. Ask a colleague for credentials and run:
-
-```
-npm login
-```
-
 Then, you can use the `npm` cli or the `yarn` package manager to install the package as a dependency:
 
 ```
