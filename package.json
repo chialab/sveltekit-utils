@@ -40,8 +40,7 @@
 		"eslint-fix": "eslint --fix --ignore-path .gitignore . --ext .js,.cjs,.ts,.svelte",
 		"prettier-check": "prettier --check \"./**/*.{json,css,js,cjs,ts,svelte}\"",
 		"prettier-fix": "prettier --write \"./**/*.{json,css,js,cjs,ts,svelte}\"",
-		"lint-fix-all": "yarn eslint-fix && yarn prettier-fix",
-		"publish": "yarn npm publish --tolerate-republish; git tag \"v$(node -e 'console.log(require(\"./package.json\").version);')\" || true"
+		"lint-fix-all": "yarn eslint-fix && yarn prettier-fix"
 	},
 	"dependencies": {
 		"cookie": "^1.0.2",
