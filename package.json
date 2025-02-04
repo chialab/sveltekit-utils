@@ -35,6 +35,7 @@
 		"app:build": "vite build",
 		"app:preview-build": "vite preview | pino-pretty",
 		"test:unit": "vitest run",
+		"test:unit:coverage": "vitest run --coverage",
 		"test:unit:watch": "vitest watch",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
