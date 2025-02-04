@@ -1,7 +1,7 @@
 import { sanitizeHtml } from '$lib/utils/browser';
 import { describe, expect, it } from 'vitest';
 
-describe.skipIf(typeof window === 'undefined')(sanitizeHtml.name, async () => {
+describe(sanitizeHtml.name, async () => {
 	const CASES = {
 		'should remove tag': { html: 'hello <a href="https://example.org/">world</a>', expected: 'hello world' },
 	} satisfies Record<string, { html: string | undefined | null; expected: string }>;

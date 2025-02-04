@@ -16,8 +16,29 @@ jobs:
         with:
           cache: yarn
 
+      - name: Get Yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Setup Yarn cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install project dependencies
         run: yarn install
+
+      - name: Setup Playwright cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
+
+      - name: Install Playwright browsers
+        run: yarn run playwright install --with-deps
 
       - name: Check
         run: yarn run test:unit

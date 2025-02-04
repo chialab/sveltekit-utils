@@ -1,18 +1,24 @@
-import { destination, type Level } from 'pino';
+import type { Level } from 'pino';
 
-const METADATA = Symbol.for('pino.metadata');
+class DebugTransport {
+	#data: string[] = [];
 
-type PinoMetadata = ReturnType<typeof destination> & {
-	[METADATA]: boolean;
-	lastLevel?: Level;
-	lastMsg?: string;
-	lastObj?: unknown;
-	lastTime?: number;
-};
+	lastLevel?: Level = undefined;
+	lastMsg?: string = undefined;
+	lastObj?: unknown = undefined;
+	lastTime?: number = undefined;
 
-export const testTransportFactory = () => {
-	const dest = destination('/dev/null') as PinoMetadata;
-	dest[METADATA] = true;
+	get [Symbol.for('pino.metadata')]() {
+		return true;
+	}
 
-	return dest;
-};
+	get writable() {
+		return true;
+	}
+
+	write(datum: string): void {
+		this.#data.push(datum);
+	}
+}
+
+export const testTransportFactory = () => new DebugTransport();

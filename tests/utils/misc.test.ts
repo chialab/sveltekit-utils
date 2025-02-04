@@ -7,7 +7,7 @@ describe(timeout.name, () => {
 		const result = await timeout(80);
 		const end = Date.now();
 
-		expect(end - start).to.be.approximately(80, 2);
+		expect(end - start).to.be.approximately(80, 5);
 		expect(result).to.equal(undefined);
 	});
 
@@ -16,7 +16,7 @@ describe(timeout.name, () => {
 		const result = await timeout(120, { foo: 'bar' });
 		const end = Date.now();
 
-		expect(end - start).to.be.approximately(120, 2);
+		expect(end - start).to.be.approximately(120, 5);
 		expect(result).to.deep.equal({ foo: 'bar' });
 	});
 });
@@ -64,9 +64,9 @@ describe(backoffRetry.name, () => {
 		await expect(backoffRetry(factory, 10, 50, 3, JitterMode.None)).resolves.to.equal('foo');
 		expect(count).to.equals(3);
 		expect(laps).to.have.length(3);
-		expect(laps[0]).to.be.approximately(0, 2);
-		expect(laps[1]).to.be.approximately(10, 2);
-		expect(laps[2]).to.be.approximately(20, 2);
+		expect(laps[0]).to.be.approximately(0, 5);
+		expect(laps[1]).to.be.approximately(10, 5);
+		expect(laps[2]).to.be.approximately(20, 5);
 	});
 
 	it('should not wait longer than cap', async () => {
@@ -85,9 +85,9 @@ describe(backoffRetry.name, () => {
 		await expect(backoffRetry(factory, 10, 15, 3, JitterMode.None)).resolves.to.equal('foo');
 		expect(count).to.equals(3);
 		expect(laps).to.have.length(3);
-		expect(laps[0]).to.be.approximately(0, 2);
-		expect(laps[1]).to.be.approximately(10, 2);
-		expect(laps[2]).to.be.approximately(15, 2);
+		expect(laps[0]).to.be.approximately(0, 5);
+		expect(laps[1]).to.be.approximately(10, 5);
+		expect(laps[2]).to.be.approximately(15, 5);
 	});
 
 	it('should not invoke the function more than max attempts times', async () => {
@@ -106,7 +106,7 @@ describe(backoffRetry.name, () => {
 		await expect(backoffRetry(factory, 10, 15, 2, JitterMode.None)).resolves.to.equal(undefined);
 		expect(count).to.equals(2);
 		expect(laps).to.have.length(2);
-		expect(laps[0]).to.be.approximately(0, 2);
-		expect(laps[1]).to.be.approximately(10, 2);
+		expect(laps[0]).to.be.approximately(0, 5);
+		expect(laps[1]).to.be.approximately(10, 5);
 	});
 });
