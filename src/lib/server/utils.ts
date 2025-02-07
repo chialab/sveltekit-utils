@@ -23,9 +23,4 @@ export type Hashed<T> = { hash: string } & T;
  * @param input String to compute hash for.
  * @param algo Algorithm.
  */
-export const computeHash = (input: string, algo = 'sha256'): string => {
-	const hash = createHash(algo);
-	hash.update(input);
-
-	return hash.digest('hex');
-};
+export const computeHash = (input: string, algo = 'sha256'): string => createHash(algo).update(input).digest('hex');
