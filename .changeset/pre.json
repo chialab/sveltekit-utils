@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@chialab/sveltekit-utils": "0.0.2"
+  },
+  "changesets": []
+}
