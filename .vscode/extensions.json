@@ -5,6 +5,7 @@
 		"dbaeumer.vscode-eslint", // ESLint official extension
 		"esbenp.prettier-vscode", // Prettier official extension
 		"stylelint.vscode-stylelint", // Stylelint official extension
-		"svelte.svelte-vscode" // Svelte official extension
+		"svelte.svelte-vscode", // Svelte official extension
+		"vitest.explorer" // Vitest official extension
 	]
 }
