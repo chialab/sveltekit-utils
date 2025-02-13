@@ -1,9 +1,10 @@
 import type { JitterFn, JitterMode } from '../../utils/misc.js';
+import type { StorageReadWriter } from '../storage.js';
 
 /**
  * Base class for caching.
  */
-export abstract class BaseCache<V> {
+export abstract class BaseCache<V> implements StorageReadWriter<V> {
 	/**
 	 * Read an item from the cache, if present.
 	 *
@@ -48,6 +49,13 @@ export abstract class BaseCache<V> {
 	public abstract clear(prefix?: string): Promise<void>;
 
 	/**
+	 * Flush cache removing all items matching a pattern.
+	 *
+	 * @param pattern Pattern to clear. May include the wildcard `*`.
+	 */
+	public abstract clearPattern(pattern: string): Promise<void>;
+
+	/**
 	 * Read or set an item in the cache.
 	 *
 	 * @param key Key.
@@ -74,12 +82,12 @@ export abstract class BaseCache<V> {
 		jitter?: JitterMode | JitterFn | undefined,
 	): Promise<V | undefined> {
 		const cached = await this.get(key);
-		if (typeof cached !== 'undefined') {
+		if (cached !== undefined) {
 			return cached;
 		}
 
 		const value = await callback();
-		if (typeof value !== 'undefined') {
+		if (value !== undefined) {
 			await this.set(key, value, ttl, jitter);
 		}
 
