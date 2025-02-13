@@ -1,4 +1,4 @@
-import { entries, group, sift } from '$lib/utils/collections';
+import { asyncIterableToArray, entries, group, sift } from '$lib/utils/collections';
 import { describe, expect, it } from 'vitest';
 
 describe(group.name, () => {
@@ -62,5 +62,17 @@ describe(sift.name, () => {
 	it('should remove falsy items from array', () => {
 		const d = new Date();
 		expect(sift([null, 1, '', 'foo', undefined, d, false, [], 0])).to.deep.equal([1, 'foo', d, []]);
+	});
+});
+
+describe(asyncIterableToArray.name, () => {
+	it('should transform an async generator to an array', async () => {
+		async function* myGenerator() {
+			yield 1;
+			yield 2;
+			yield 3;
+		}
+
+		await expect(asyncIterableToArray(myGenerator())).resolves.has.members([1, 2, 3]);
 	});
 });
