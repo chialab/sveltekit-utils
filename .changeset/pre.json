@@ -4,5 +4,11 @@
   "initialVersions": {
     "@chialab/sveltekit-utils": "0.0.2"
   },
-  "changesets": []
+  "changesets": [
+    "dry-lions-occur",
+    "few-knives-notice",
+    "fifty-drinks-bake",
+    "hot-spies-crash",
+    "lemon-insects-laugh"
+  ]
 }
