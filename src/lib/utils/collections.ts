@@ -61,3 +61,20 @@ export const entries = <T extends Parameters<typeof Object.entries>[0]>(obj: T) 
  * @returns the sifted array.
  */
 export const sift = <T>(arr: readonly T[]) => arr.filter(Boolean) as NonNullable<T>[];
+
+/**
+ * Transform an async iterable to an array.
+ * @param iterable Async iterable.
+ */
+export const asyncIterableToArray = async <T>(iterable: AsyncIterable<T>): Promise<T[]> => {
+	if ('fromAsync' in Array && typeof Array.fromAsync === 'function') {
+		return Array.fromAsync(iterable);
+	}
+
+	const result: T[] = [];
+	for await (const item of iterable) {
+		result.push(item);
+	}
+
+	return result;
+};
