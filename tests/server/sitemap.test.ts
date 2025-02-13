@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import { Sitemap, SitemapIndex } from '$lib/server/sitemap';
-import { xml2js } from 'xml-js';
 import { gunzipSync } from 'node:zlib';
+import { describe, expect, it } from 'vitest';
+import { xml2js } from 'xml-js';
 
 const toBuf = (body: ReadableStreamReadResult<Uint8Array<ArrayBufferLike>>) => Buffer.from(body.value ?? []);
 
@@ -24,11 +24,7 @@ describe(Sitemap.name, () => {
 		const xml = sitemap.toString();
 		const { elements } = xml2js(xml);
 		expect(elements).deep.equal([
-			{
-				attributes: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' },
-				name: 'urlset',
-				type: 'element',
-			},
+			{ attributes: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' }, name: 'urlset', type: 'element' },
 		]);
 
 		const uncompressed = sitemap.toResponse(false);
@@ -143,11 +139,7 @@ describe(SitemapIndex.name, () => {
 		const xml = sitemapIndex.toString();
 		const { elements } = xml2js(xml);
 		expect(elements).deep.equal([
-			{
-				attributes: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' },
-				name: 'sitemapindex',
-				type: 'element',
-			},
+			{ attributes: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' }, name: 'sitemapindex', type: 'element' },
 		]);
 
 		const uncompressed = sitemapIndex.toResponse(false);

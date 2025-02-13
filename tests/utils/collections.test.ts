@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { entries, group, sift } from '$lib/utils/collections';
+import { describe, expect, it } from 'vitest';
 
 describe(group.name, () => {
 	it('should group items when using default comparison and single group', () => {
