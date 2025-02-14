@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.1
+
+### Patch Changes
+
+- 0f5cf47: Fix import of `@heyputer/kv.js`.
+
 ## 0.1.0-alpha.0
 
 ### Minor Changes
