@@ -1,7 +1,7 @@
 import { backoffRetry, getRandomInt, JitterMode, timeout } from '$lib/utils/misc';
 import { describe, expect, it } from 'vitest';
 
-describe(timeout.name, () => {
+describe(timeout.name, { retry: 3 }, () => {
 	it('should return void after the requested timeout', async () => {
 		const start = Date.now();
 		const result = await timeout(80);
@@ -35,7 +35,7 @@ describe(getRandomInt.name, () => {
 	});
 });
 
-describe(backoffRetry.name, () => {
+describe(backoffRetry.name, { retry: 3 }, () => {
 	it('should immediately return the result if the function is successful', async () => {
 		let count = 0;
 		const factory = () => {

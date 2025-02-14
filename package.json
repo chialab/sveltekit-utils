@@ -1,7 +1,7 @@
 {
 	"name": "@chialab/sveltekit-utils",
 	"license": "MIT",
-	"version": "0.0.2",
+	"version": "0.1.0-alpha.1",
 	"type": "module",
 	"files": [
 		"dist",
@@ -47,6 +47,7 @@
 		"lint-fix-all": "yarn run eslint-fix && yarn run prettier-fix"
 	},
 	"dependencies": {
+		"@heyputer/kv.js": "^0.1.9",
 		"cookie": "^1.0.2",
 		"pino": "^9.5.0",
 		"redis": "^4.7.0",

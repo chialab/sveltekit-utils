@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@chialab/sveltekit-utils": "0.0.2"
+  },
+  "changesets": [
+    "dry-lions-occur",
+    "few-knives-notice",
+    "fifty-drinks-bake",
+    "five-toes-live",
+    "hot-spies-crash",
+    "lemon-insects-laugh"
+  ]
+}
