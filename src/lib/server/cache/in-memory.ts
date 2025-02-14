@@ -1,24 +1,24 @@
-import kvjs from '@heyputer/kv.js';
+import { createRequire } from 'node:module';
 import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
 import { addPrefix, stripPrefix } from '../../utils/string.js';
 import { BaseCache } from './base.js';
 
-type InMemoryCacheOptions = {
-	keyPrefix?: string;
-	defaultTTL?: number;
-	defaultJitter?: JitterMode | JitterFn;
-};
+type InMemoryCacheOptions = { keyPrefix?: string; defaultTTL?: number; defaultJitter?: JitterMode | JitterFn };
+
+// `import kvjs from '@heyputer/kv.js';` does not work!
+// This module has side effects while loading that might cause build to fail.
+const kvjs = createRequire(import.meta.url)('@heyputer/kv.js');
 
 /** Simple cache with TTL and cap to maximum items stored. */
 export class InMemoryCache<V> extends BaseCache<V> {
 	readonly #options: InMemoryCacheOptions;
-	readonly #inner: kvjs;
+	readonly #inner: typeof kvjs;
 
 	public static init<V>(options: InMemoryCacheOptions): InMemoryCache<V> {
 		return new this<V>(options);
 	}
 
-	private constructor(options: InMemoryCacheOptions, store?: kvjs) {
+	private constructor(options: InMemoryCacheOptions, store?: typeof kvjs) {
 		super();
 
 		this.#options = Object.freeze({ ...options });
@@ -30,11 +30,7 @@ export class InMemoryCache<V> extends BaseCache<V> {
 		options?: Partial<Omit<InMemoryCacheOptions, 'keyPrefix'>>,
 	): InMemoryCache<V2> {
 		return new InMemoryCache<V2>(
-			{
-				...this.#options,
-				...options,
-				keyPrefix: addPrefix(this.#options.keyPrefix, keyPrefix),
-			},
+			{ ...this.#options, ...options, keyPrefix: addPrefix(this.#options.keyPrefix, keyPrefix) },
 			this.#inner,
 		);
 	}
