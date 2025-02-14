@@ -15,7 +15,7 @@ describe(Session.name, () => {
 		it('should start a new session', async () => {
 			expect.assertions(4);
 
-			const result = Session.with(cookies, { name: 'FOO_SESSION' }, storage, async (session) => {
+			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
 					(session: Session<SessionData>) => session.dirty,
 				);
@@ -35,7 +35,7 @@ describe(Session.name, () => {
 			cookies.set('FOO_SESSION', 'foobarbaz');
 			storage.set('foobarbaz', { foo: 'bar', bar: ['hello world', 42] });
 
-			const result = Session.with(cookies, { name: 'FOO_SESSION' }, storage, async (session) => {
+			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
 					(session: Session<SessionData>) =>
 						!session.dirty && session.id === 'foobarbaz' && session.read('foo') === 'bar' && session.check('bar'),
@@ -53,7 +53,7 @@ describe(Session.name, () => {
 
 			cookies.set('FOO_SESSION', 'foobarbaz');
 
-			const result = Session.with(cookies, { name: 'FOO_SESSION' }, storage, async (session) => {
+			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
 					(session: Session<SessionData>) => session.dirty,
 				);
@@ -79,7 +79,7 @@ describe(Session.name, () => {
 
 			cookies.set('FOO_SESSION', 'foobarbaz');
 
-			const result = Session.with(cookies, { name: 'FOO_SESSION' }, storage, () => {
+			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, () => {
 				expect.unreachable();
 			});
 
@@ -99,7 +99,7 @@ describe(Session.name, () => {
 				}
 			})();
 
-			const result = Session.with(cookies, { name: 'FOO_SESSION' }, storage, async (session) => {
+			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
 					(session: Session<SessionData>) => session.dirty,
 				);
