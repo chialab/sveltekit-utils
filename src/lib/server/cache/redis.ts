@@ -1,15 +1,16 @@
 import {
 	createClient,
 	createCluster,
-	type RedisClientType,
 	type RedisClientOptions,
-	type RedisClusterType,
+	type RedisClientType,
 	type RedisClusterOptions,
+	type RedisClusterType,
 	type RedisDefaultModules,
 } from 'redis';
 import { logger } from '../../logger.js';
-import { BaseCache } from './base.js';
 import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
+import { addPrefix, stripPrefix } from '../../utils/string.js';
+import { BaseCache } from './base.js';
 
 type RedisCacheOptions = {
 	keyPrefix?: string;
@@ -60,7 +61,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 	}
 
 	async #connect(): Promise<RedisClientOrCluster> {
-		if (typeof this.#connectPromise === 'undefined') {
+		if (this.#connectPromise === undefined) {
 			this.#connectPromise = this.#client.connect();
 		}
 
@@ -77,7 +78,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 			{
 				...this.#options,
 				...options,
-				keyPrefix: this.#key(keyPrefix),
+				keyPrefix: addPrefix(this.#options.keyPrefix, keyPrefix),
 			},
 			this.#client.duplicate(),
 		);
@@ -85,7 +86,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 
 	public async get(key: string): Promise<Jsonify<V> | undefined> {
 		const client = await this.#connect();
-		const val = await client.get(this.#key(key));
+		const val = await client.get(addPrefix(this.#options.keyPrefix, key));
 		if (val === null) {
 			return undefined;
 		}
@@ -114,11 +115,11 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		const client = await this.#connect();
 		const val = JSON.stringify(value);
 		try {
-			if (typeof ttl === 'undefined') {
-				await client.set(this.#key(key), val);
+			if (ttl === undefined) {
+				await client.set(addPrefix(this.#options.keyPrefix, key), val);
 			} else {
 				const jitterFn = createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None);
-				await client.setEx(this.#key(key), Math.round(jitterFn(ttl)), val);
+				await client.setEx(addPrefix(this.#options.keyPrefix, key), Math.round(jitterFn(ttl)), val);
 			}
 		} catch (err) {
 			logger.error({ key, err }, 'Got error while trying to set cache key');
@@ -128,18 +129,18 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 	public async delete(key: string): Promise<void> {
 		const client = await this.#connect();
 
-		await client.del(this.#key(key));
+		await client.del(addPrefix(this.#options.keyPrefix, key));
 	}
 
 	public async *keys(prefix?: string): AsyncGenerator<string, void, never> {
-		const matchFilter = this.#key(`${prefix ?? ''}*`);
+		const matchFilter = addPrefix(this.#options.keyPrefix, `${prefix ?? ''}*`);
 		const client = await this.#connect();
 		const clients = 'masters' in client ? client.masters.map(({ client }) => client!) : [client];
 		for (const clientPromise of clients) {
 			const client = await clientPromise;
 
 			for await (const key of client.scanIterator({ MATCH: matchFilter })) {
-				yield this.#stripPrefix(key)!;
+				yield stripPrefix(this.#options.keyPrefix, key)!;
 			}
 		}
 	}
@@ -152,7 +153,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		const scanNode = async (client: RedisClientType) => {
 			let cursor = 0;
 			do {
-				const res = await client.scan(cursor, { MATCH: this.#key(pattern) });
+				const res = await client.scan(cursor, { MATCH: addPrefix(this.#options.keyPrefix, pattern) });
 				cursor = res.cursor;
 				if (res.keys.length > 0) {
 					await client.del(res.keys);
@@ -164,23 +165,5 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		await Promise.all(
 			'masters' in client ? client.masters.map(async ({ client }) => scanNode(await client!)) : [scanNode(client)],
 		);
-	}
-
-	/**
-	 * Return key including prefix.
-	 *
-	 * @param key Key without prefix.
-	 */
-	#key(key: string): string {
-		return (this.#options.keyPrefix ?? '') + key;
-	}
-
-	#stripPrefix(key: string) {
-		const prefix = this.#options.keyPrefix ?? '';
-		if (!key.startsWith(prefix)) {
-			return undefined;
-		}
-
-		return key.substring(prefix.length);
 	}
 }
