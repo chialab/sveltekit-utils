@@ -431,10 +431,9 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
-"@heyputer/kv.js@^0.1.9":
+"@heyputer/kv.js@fquffio/kv.js#fix/strict-mode":
   version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@heyputer/kv.js/-/kv.js-0.1.9.tgz#23876bb85b1733b57ee25b50dcd229050a95fe41"
-  integrity sha512-4zmS/kMp/glMmw4h+OYkD+AribMAdfFj1/1AyLpO/bgQELjM7ZsGX7VeaqtbgiNAT5loeDd3ER9PtP9KUULuHg==
+  resolved "https://codeload.github.com/fquffio/kv.js/tar.gz/813de43135fe812ec17b50fd8ed3c65184c09722"
   dependencies:
     minimatch "^9.0.0"
 

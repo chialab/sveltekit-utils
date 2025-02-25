@@ -47,7 +47,7 @@
 		"lint-fix-all": "yarn run eslint-fix && yarn run prettier-fix"
 	},
 	"dependencies": {
-		"@heyputer/kv.js": "^0.1.9",
+		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
 		"cookie": "^1.0.2",
 		"pino": "^9.5.0",
 		"redis": "^4.7.0",
