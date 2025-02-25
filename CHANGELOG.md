@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.2
+
+### Patch Changes
+
+- 3404b94: Use patched version of `@heyputer/kv.js`.
+
 ## 0.1.0-alpha.1
 
 ### Patch Changes
