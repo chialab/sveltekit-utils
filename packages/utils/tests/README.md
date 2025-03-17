@@ -4,7 +4,7 @@ Tests are executed by [Vitest](https://vitest.dev/).
 
 ## Running tests
 
-Tests can be run with `yarn run test:unit`. Coverage can be generated with `yarn run test:unit:coverage`.
+Tests can be run with `pnpm run test:unit`. Coverage can be generated with `pnpm run test:unit:coverage`.
 
 ## File names conventions
 

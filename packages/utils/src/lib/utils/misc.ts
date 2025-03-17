@@ -78,7 +78,6 @@ export const backoffRetry = async <T>(
 	const sleep = (attempt: number) => jitter(Math.min(baseMs * 2 ** attempt, capMs));
 
 	let attempt = 0;
-	// eslint-disable-next-line no-constant-condition
 	while (true) {
 		const value = await factory();
 		if (value !== undefined) {

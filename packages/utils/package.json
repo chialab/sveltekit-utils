@@ -1,0 +1,62 @@
+{
+	"name": "@chialab/sveltekit-utils",
+	"license": "MIT",
+	"version": "0.0.2",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"start": "pnpm dev",
+		"build": "svelte-kit sync && svelte-package",
+		"app:build": "vite build",
+		"app:preview-build": "vite preview | pino-pretty",
+		"test:unit": "vitest run",
+		"test:unit:coverage": "vitest run --coverage",
+		"test:unit:watch": "vitest watch",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"eslint-check": "eslint .",
+		"eslint-fix": "eslint --fix .",
+		"prettier-check": "prettier --check \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"prettier-fix": "prettier --write \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"lint": "pnpm run check && pnpm run eslint-check && pnpm run prettier-fix",
+		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
+	},
+	"dependencies": {
+		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
+		"cookie": "^1.0.2",
+		"pino": "^9.5.0",
+		"redis": "^4.7.0",
+		"xml-js": "^1.6.11"
+	},
+	"devDependencies": {
+		"@chialab/sveltekit-dev-utils": "workspace:*",
+		"@sveltejs/adapter-static": "^3.0.6",
+		"@sveltejs/kit": "^2.8.1",
+		"@sveltejs/package": "^2.3.7",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@types/node": "^22.9.1",
+		"@vitest/browser": "^3.0.5",
+		"@vitest/coverage-v8": "^3.0.5",
+		"eslint": "catalog:",
+		"pino-pretty": "^13.0.0",
+		"playwright": "^1.50.1",
+		"prettier": "catalog:",
+		"prettier-plugin-svelte": "^3.3.1",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.1.4",
+		"tslib": "^2.8.1",
+		"typescript": "^5.6.3",
+		"vite": "^6.0.0",
+		"vitest": "^3.0.5"
+	},
+	"packageManager": "pnpm@10.6.2+sha256.20072a1f6edd17646ea9234bf32c42d563dad37b2973e97a2dde5c17774a824d",
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0",
+		"svelte": "^4.2.1 || ^5.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:chialab/sveltekit-utils.git",
+		"directory": "packages/utils"
+	}
+}

@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-/.svelte-kit
 /package
 /public
 /.env.production
@@ -12,3 +11,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.tsbuildinfo
 .pnpm-cache
+.svelte-kit
