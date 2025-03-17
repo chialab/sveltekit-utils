@@ -6,7 +6,7 @@ node_modules
 /.env.production
 /.env.*.local
 /*.log
-/tests/coverage/
+**/tests/coverage/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.tsbuildinfo

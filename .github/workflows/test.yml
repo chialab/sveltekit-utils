@@ -31,11 +31,14 @@ jobs:
 
       - name: Install Playwright browsers
         run: pnpm run playwright install --with-deps
+        working-directory: packages/utils
 
       - name: Check
         run: pnpm run test:unit:coverage
+        working-directory: packages/utils
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
+          directory: packages/utils
           token: ${{ secrets.CODECOV_TOKEN }}

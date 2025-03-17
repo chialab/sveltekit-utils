@@ -22,9 +22,12 @@ jobs:
 
       - name: Check
         run: pnpm run check
+        working-directory: packages/utils
 
       - name: Check eslint
         run: pnpm run eslint-check
+        working-directory: packages/utils
 
       - name: Check prettier
         run: pnpm run prettier-check
+        working-directory: packages/utils

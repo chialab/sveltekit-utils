@@ -25,6 +25,7 @@ jobs:
 
       - name: Build project
         run: pnpm build
+        working-directory: packages/utils
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
