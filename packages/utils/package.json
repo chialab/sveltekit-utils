@@ -3,6 +3,30 @@
 	"license": "MIT",
 	"version": "0.0.2",
 	"type": "module",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./server": {
+			"types": "./dist/server/index.d.ts",
+			"node": "./dist/server/index.js",
+			"svelte": null,
+			"default": null
+		},
+		"./logger": {
+			"types": "./dist/logger.d.ts",
+			"default": "./dist/logger.js"
+		},
+		"./utils": {
+			"types": "./dist/utils/index.d.ts",
+			"default": "./dist/utils/index.js"
+		}
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"start": "pnpm dev",
