@@ -1,0 +1,47 @@
+{
+	"name": "@chialab/sveltekit-dev-utils",
+	"version": "0.0.2",
+	"license": "MIT",
+	"description": "A set of shareable configurations",
+	"type": "module",
+	"exports": {
+		"./eslint-config": {
+			"default": "./eslint.config.js"
+		},
+		"./prettier-config": {
+			"default": "./.prettierrc.mjs"
+		},
+		"./stylelint-config": {
+			"default": "./stylelint.config.mjs"
+		}
+	},
+	"dependencies": {
+		"@eslint/js": "^9.19.0",
+		"@typescript-eslint/eslint-plugin": "^8.22.0",
+		"@typescript-eslint/parser": "^8.22.0",
+		"eslint-config-prettier": "^10.1.1",
+		"eslint-plugin-svelte": "^3.1.0",
+		"globals": "^16.0.0",
+		"prettier-plugin-svelte": "^3.3.1",
+		"stylelint-config-html": "^1.1.0",
+		"stylelint-config-standard": "^37.0.0",
+		"stylelint-value-no-unknown-custom-properties": "^6.0.1",
+		"typescript-eslint": "^8.22.0"
+	},
+	"devDependencies": {
+		"eslint": "catalog:",
+		"prettier": "catalog:",
+		"stylelint": "catalog:"
+	},
+	"peerDependencies": {
+		"eslint": "catalog:",
+		"prettier": "catalog:",
+		"stylelint": "catalog:"
+	},
+	"packageManager": "pnpm@10.6.2+sha256.20072a1f6edd17646ea9234bf32c42d563dad37b2973e97a2dde5c17774a824d",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:chialab/sveltekit-utils.git",
+		"directory": "packages/dev-utils"
+	}
+}

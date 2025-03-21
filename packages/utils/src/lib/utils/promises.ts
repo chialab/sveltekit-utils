@@ -1,4 +1,3 @@
-import { readonly, writable, type Readable } from 'svelte/store';
 import { timeout } from './misc.js';
 
 type MaybeFactory<T> = T | (() => T);
@@ -44,8 +43,8 @@ export const lazyLoad = <T>(
 	dfd: Promise<T>,
 	showLoaderTimeout = 300,
 	hideLoaderTimeout = 700,
-): { result: Promise<T>; showLoader: Readable<boolean> } => {
-	const showLoader = writable(false);
+): { result: Promise<T>; showLoader: boolean } => {
+	let showLoader = $state(false);
 	const tookTooLong = Symbol('loading took too long, displaying loader');
 
 	const result = Promise.race([dfd, timeout(showLoaderTimeout, tookTooLong)]).then((result) => {
@@ -53,16 +52,16 @@ export const lazyLoad = <T>(
 			return result;
 		}
 
-		showLoader.set(true);
+		showLoader = true;
 
 		return Promise.all([dfd, timeout(hideLoaderTimeout, undefined)]).then(([result]) => {
-			showLoader.set(false);
+			showLoader = false;
 
 			return result;
 		});
 	});
 
-	return { showLoader: readonly(showLoader), result };
+	return { showLoader, result };
 };
 
 /**

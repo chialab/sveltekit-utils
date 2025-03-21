@@ -14,23 +14,27 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          cache: yarn
+          cache: pnpm
 
       - name: Install project dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Build project
-        run: yarn build
+        run: pnpm build
+        working-directory: packages/utils
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: yarn changeset publish
+          publish: pnpm changeset publish
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
