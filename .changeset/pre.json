@@ -2,7 +2,8 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@chialab/sveltekit-utils": "0.0.2"
+    "@chialab/sveltekit-utils": "0.0.2",
+    "@chialab/sveltekit-dev-utils": "0.0.2"
   },
   "changesets": [
     "dry-lions-occur",
@@ -11,6 +12,7 @@
     "five-toes-live",
     "giant-melons-stare",
     "hot-spies-crash",
-    "lemon-insects-laugh"
+    "lemon-insects-laugh",
+    "ten-views-grab"
   ]
 }

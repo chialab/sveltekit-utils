@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.0
+
+### Minor Changes
+
+- 233eaca: Refactor to monorepo with configs and utils packages
+
 ## 0.1.0-alpha.2
 
 ### Patch Changes
