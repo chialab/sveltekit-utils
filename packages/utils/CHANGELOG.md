@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.4
+
+### Patch Changes
+
+- 69c18fe: Restore the store implementation for `lazyLoad` function
+
 ## 0.1.0-alpha.0
 
 ### Minor Changes
