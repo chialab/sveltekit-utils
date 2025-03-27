@@ -1,7 +1,5 @@
-import * as prettierPluginSvelte from 'prettier-plugin-svelte';
-
 /** @type {import('prettier').Config} */
-export default {
+module.exports = {
 	printWidth: 120,
 	tabWidth: 2,
 	useTabs: true,
@@ -12,6 +10,6 @@ export default {
 	bracketSameLine: false,
 	arrowParens: 'always',
 	endOfLine: 'auto',
-	plugins: [prettierPluginSvelte],
+	plugins: [require.resolve('prettier-plugin-svelte')],
 	overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
 };

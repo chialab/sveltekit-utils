@@ -9,11 +9,19 @@
 			"default": "./eslint.config.js"
 		},
 		"./prettier-config": {
-			"default": "./.prettierrc.mjs"
+			"default": "./.prettierrc.cjs"
 		},
 		"./stylelint-config": {
 			"default": "./stylelint.config.mjs"
 		}
+	},
+	"scripts": {
+		"eslint-check": "eslint .",
+		"eslint-fix": "eslint --fix .",
+		"prettier-check": "prettier --check \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"prettier-fix": "prettier --write \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"lint": "pnpm run eslint-check && pnpm run prettier-fix",
+		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
 	},
 	"dependencies": {
 		"@eslint/js": "^9.19.0",
