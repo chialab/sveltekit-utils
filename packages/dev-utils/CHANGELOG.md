@@ -1,5 +1,11 @@
 # @chialab/sveltekit-dev-utils
 
+## 0.1.0-alpha.3
+
+### Patch Changes
+
+- b9d7746: Fix import of extended configs and plugins for stylelint
+
 ## 0.1.0-alpha.2
 
 ### Patch Changes
