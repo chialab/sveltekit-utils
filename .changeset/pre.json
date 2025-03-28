@@ -6,6 +6,7 @@
     "@chialab/sveltekit-dev-utils": "0.0.2"
   },
   "changesets": [
+    "beige-falcons-taste",
     "dry-lions-occur",
     "few-knives-notice",
     "fifty-drinks-bake",
