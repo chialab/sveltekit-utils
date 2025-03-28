@@ -1,6 +1,6 @@
 /** @type {import('stylelint').Config} */
 export default {
-	extends: ['stylelint-config-standard', 'stylelint-config-html/svelte'],
+	extends: [import.meta.resolve('stylelint-config-standard'), import.meta.resolve('stylelint-config-html/svelte')],
 	rules: {
 		'selector-pseudo-class-no-unknown': [
 			true,
@@ -23,5 +23,5 @@ export default {
 		],
 		'csstools/value-no-unknown-custom-properties': [true, { importFrom: ['./src/style.css'] }],
 	},
-	plugins: ['stylelint-value-no-unknown-custom-properties'],
+	plugins: [import.meta.resolve('stylelint-value-no-unknown-custom-properties')],
 };
