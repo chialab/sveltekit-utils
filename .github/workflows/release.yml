@@ -20,15 +20,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
           cache: pnpm
 
       - name: Install project dependencies
         run: pnpm install
 
       - name: Build project
-        run: pnpm build
-        working-directory: packages/utils
+        run: pnpm run --recursive build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets

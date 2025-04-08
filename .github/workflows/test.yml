@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        node: ['lts/*', 'latest', '20']
+        node: ["lts/*", "latest", "20"]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -33,15 +33,12 @@ jobs:
           key: ${{ runner.os }}-playwright
 
       - name: Install Playwright browsers
-        run: pnpm playwright install --with-deps
-        working-directory: packages/utils
+        run: pnpm run playwright:install -- --with-deps=chromium
 
       - name: Check
-        run: pnpm run test:unit:coverage
-        working-directory: packages/utils
+        run: pnpm run --recursive test:unit:coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
-          directory: packages/utils
           token: ${{ secrets.CODECOV_TOKEN }}
