@@ -3,7 +3,8 @@
   "tag": "alpha",
   "initialVersions": {
     "@chialab/sveltekit-utils": "0.0.2",
-    "@chialab/sveltekit-dev-utils": "0.0.2"
+    "@chialab/sveltekit-dev-utils": "0.0.2",
+    "@chialab/isomorphic-dom": "0.1.0-alpha.1"
   },
   "changesets": [
     "beige-falcons-taste",
@@ -11,6 +12,7 @@
     "few-knives-notice",
     "fifty-drinks-bake",
     "five-toes-live",
+    "funny-carrots-add",
     "giant-melons-stare",
     "hot-spies-crash",
     "lazy-games-serve",
