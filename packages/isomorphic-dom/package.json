@@ -1,7 +1,7 @@
 {
 	"name": "@chialab/isomorphic-dom",
 	"license": "MIT",
-	"version": "0.1.0-alpha.5",
+	"version": "0.1.0-alpha.1",
 	"type": "module",
 	"files": [
 		"dist"
