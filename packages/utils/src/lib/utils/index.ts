@@ -1,6 +1,7 @@
 export * from './browser.js';
 export * from './collections.js';
 export * from './fetch.js';
+export * from './html.js';
 export * from './misc.js';
 export * from './promises.js';
 export * from './string.js';

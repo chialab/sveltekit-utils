@@ -3,8 +3,8 @@ on:
   workflow_call:
 
 jobs:
-  lint:
-    name: Lint
+  svelte-check:
+    name: Svelte Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -17,20 +17,60 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
           cache: pnpm
 
       - name: Install project dependencies
         run: pnpm install
 
+      - name: Build
+        run: pnpm run --recursive build
+
       - name: Check
-        run: pnpm run check
-        working-directory: packages/utils
+        run: pnpm run --recursive check
+
+  eslint-check:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+
+      - name: Install project dependencies
+        run: pnpm install
 
       - name: Check eslint
-        run: pnpm run eslint-check
-        working-directory: packages/utils
+        run: pnpm run --recursive eslint-check
+
+  prettier-check:
+    name: Prettier Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+
+      - name: Install project dependencies
+        run: pnpm install
 
       - name: Check prettier
-        run: pnpm run prettier-check
-        working-directory: packages/utils
+        run: pnpm run --recursive prettier-check
