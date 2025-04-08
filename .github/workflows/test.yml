@@ -33,7 +33,7 @@ jobs:
           key: ${{ runner.os }}-playwright
 
       - name: Install Playwright browsers
-        run: pnpm run playwright:install -- --with-deps=chromium
+        run: pnpm run playwright:install --with-deps
 
       - name: Check
         run: pnpm run --recursive test:unit:coverage
