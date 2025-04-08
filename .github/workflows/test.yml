@@ -26,6 +26,9 @@ jobs:
       - name: Install project dependencies
         run: pnpm install
 
+      - name: Build packages
+        run: pnpm run --recursive build
+
       - name: Setup Playwright cache
         uses: actions/cache@v4
         with:
