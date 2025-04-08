@@ -4,7 +4,7 @@ export default defineWorkspace([
 	{
 		extends: './vitest.config.ts',
 		test: {
-			include: ['tests/**/*.{test,spec}.ts', '!tests/**/*.browser.{test,spec}.ts', '!tests/**/browser.{test,spec}.ts'],
+			include: ['tests/**/*.{test,spec}.ts', '!tests/**/*.browser.{test,spec}.ts'],
 			name: 'server',
 			environment: 'node',
 		},

@@ -48,11 +48,13 @@
 	"dependencies": {
 		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
 		"cookie": "^1.0.2",
+		"html-entities": "^2.6.0",
 		"pino": "^9.5.0",
 		"redis": "^4.7.0",
 		"xml-js": "^1.6.11"
 	},
 	"devDependencies": {
+		"@chialab/isomorphic-dom": "workspace:*",
 		"@chialab/sveltekit-dev-utils": "workspace:*",
 		"@sveltejs/adapter-static": "^3.0.6",
 		"@sveltejs/kit": "^2.8.1",
