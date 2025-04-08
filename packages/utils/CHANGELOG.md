@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.6
+
+### Minor Changes
+
+- 7d35776: Add support for `stripHtml` in NodeJS, decode HTML Entities.
+
 ## 0.1.0-alpha.5
 
 ### Patch Changes
