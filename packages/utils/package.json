@@ -46,6 +46,7 @@
 		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
 	},
 	"dependencies": {
+		"@chialab/isomorphic-dom": "workspace:*",
 		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
 		"cookie": "^1.0.2",
 		"html-entities": "^2.6.0",
@@ -54,7 +55,6 @@
 		"xml-js": "^1.6.11"
 	},
 	"devDependencies": {
-		"@chialab/isomorphic-dom": "workspace:*",
 		"@chialab/sveltekit-dev-utils": "workspace:*",
 		"@sveltejs/adapter-static": "^3.0.6",
 		"@sveltejs/kit": "^2.8.1",

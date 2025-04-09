@@ -112,6 +112,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@chialab/isomorphic-dom':
+        specifier: workspace:*
+        version: link:../isomorphic-dom
       '@heyputer/kv.js':
         specifier: fquffio/kv.js#fix/strict-mode
         version: https://codeload.github.com/fquffio/kv.js/tar.gz/813de43135fe812ec17b50fd8ed3c65184c09722
@@ -131,9 +134,6 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
     devDependencies:
-      '@chialab/isomorphic-dom':
-        specifier: workspace:*
-        version: link:../isomorphic-dom
       '@chialab/sveltekit-dev-utils':
         specifier: workspace:*
         version: link:../dev-utils
