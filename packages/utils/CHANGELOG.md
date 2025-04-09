@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.7
+
+### Patch Changes
+
+- 291146c: Move `@chialab/isomorphic-dom` to production dependencies.
+
 ## 0.1.0-alpha.6
 
 ### Minor Changes
