@@ -47,7 +47,7 @@
 	},
 	"dependencies": {
 		"@chialab/isomorphic-dom": "workspace:*",
-		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
+		"@heyputer/kv.js": "^0.1.91",
 		"cookie": "^1.0.2",
 		"html-entities": "^2.6.0",
 		"pino": "^9.5.0",

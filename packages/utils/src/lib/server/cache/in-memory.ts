@@ -42,24 +42,20 @@ export class InMemoryCache<V> extends BaseCache<V> {
 		jitter?: JitterMode | JitterFn | undefined,
 	): Promise<void> {
 		ttl ??= this.#options.defaultTTL;
-		if (ttl === undefined) {
-			this.#inner.set(addPrefix(this.#options.keyPrefix, key), value);
 
-			return;
-		}
-
-		this.#inner.setex(
-			addPrefix(this.#options.keyPrefix, key),
-			value,
-			createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None)(ttl * 1000),
-		);
+		this.#inner.set(addPrefix(this.#options.keyPrefix, key), value, {
+			PX:
+				ttl !== undefined
+					? createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None)(ttl * 1000)
+					: undefined,
+		});
 	}
 
 	public async delete(key: string): Promise<void> {
 		this.#inner.del(addPrefix(this.#options.keyPrefix, key));
 	}
 
-	public async *keys(prefix?: string): AsyncGenerator<string, void, never> {
+	public async *keys(prefix?: string): AsyncGenerator<string, void, undefined> {
 		yield* this.#inner
 			.keys(addPrefix(this.#options.keyPrefix, `${prefix ?? ''}*`))
 			.map((key) => stripPrefix(this.#options.keyPrefix, key)!);

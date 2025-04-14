@@ -132,7 +132,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		await client.del(addPrefix(this.#options.keyPrefix, key));
 	}
 
-	public async *keys(prefix?: string): AsyncGenerator<string, void, never> {
+	public async *keys(prefix?: string): AsyncGenerator<string, void, undefined> {
 		const matchFilter = addPrefix(this.#options.keyPrefix, `${prefix ?? ''}*`);
 		const client = await this.#connect();
 		const clients = 'masters' in client ? client.masters.map(({ client }) => client!) : [client];
