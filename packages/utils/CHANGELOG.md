@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.8
+
+### Patch Changes
+
+- 59eab1c: Upgrade `@heyputer/kv.js` to latest version, fix keys never set in in-memory cache when ttl was non-zero and key did not exist.
+
 ## 0.1.0-alpha.7
 
 ### Patch Changes
