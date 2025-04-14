@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.9
+
+### Patch Changes
+
+- c58afd1: Rollback to patched version of `@heyputer/kv.js` since 0.1.91 does not include fixes of HeyPuter/kv.js#18.
+
 ## 0.1.0-alpha.8
 
 ### Patch Changes
