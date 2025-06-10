@@ -9,6 +9,7 @@ import { decode } from 'html-entities';
 export const stripHtml = (html: string | null | undefined): string => {
 	const element = document.createElement('div');
 	element.innerHTML = html ?? '';
+	element.querySelectorAll('style,script,iframe').forEach((node) => node.remove());
 
 	return decode(element.innerText);
 };
