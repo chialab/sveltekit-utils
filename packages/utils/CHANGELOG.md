@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.10
+
+### Patch Changes
+
+- e7cfedb: Fix stripHtml method to remove style, script and iframe tags before extracting the text in the html.
+
 ## 0.1.0-alpha.9
 
 ### Patch Changes
