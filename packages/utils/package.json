@@ -46,6 +46,7 @@
 		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.828.0",
 		"@chialab/isomorphic-dom": "workspace:*",
 		"@heyputer/kv.js": "fquffio/kv.js#fix/strict-mode",
 		"cookie": "^1.0.2",
