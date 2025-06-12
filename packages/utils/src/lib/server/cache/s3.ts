@@ -45,34 +45,34 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 
 	public async get(key: string): Promise<V | undefined> {
 		const s3Key = this.buildKey(key);
-		const head = await this.#client.send(
-			new HeadObjectCommand({
-				Bucket: this.#options.bucket,
-				Key: s3Key,
-			}),
-		);
+		try {
+			const head = await this.#client.send(
+				new HeadObjectCommand({
+					Bucket: this.#options.bucket,
+					Key: s3Key,
+				}),
+			);
 
-		if (!head.Metadata) {
+			const expiresAtStr = head.Metadata?.['expires-at'];
+			if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr, 10)) {
+				await this.delete(key);
+				return undefined;
+			}
+
+			const res = await this.#client.send(
+				new GetObjectCommand({
+					Bucket: this.#options.bucket,
+					Key: s3Key,
+				}),
+			);
+
+			if (!res.Body) {
+				return undefined;
+			}
+			return res.Body.transformToByteArray() as Promise<V>;
+		} catch {
 			return undefined;
 		}
-
-		const expiresAtStr = head.Metadata?.['expires-at'];
-		if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr, 10)) {
-			await this.delete(key);
-			return undefined;
-		}
-
-		const res = await this.#client.send(
-			new GetObjectCommand({
-				Bucket: this.#options.bucket,
-				Key: s3Key,
-			}),
-		);
-
-		if (!res.Body) {
-			return undefined;
-		}
-		return res.Body.transformToByteArray() as Promise<V>;
 	}
 
 	public async set(
