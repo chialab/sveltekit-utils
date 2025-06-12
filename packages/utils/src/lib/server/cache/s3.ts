@@ -52,6 +52,10 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 			}),
 		);
 
+		if (!head.Metadata) {
+			return undefined;
+		}
+
 		const expiresAtStr = head.Metadata?.['expires-at'];
 		if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr)) {
 			await this.delete(key);
@@ -71,11 +75,17 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		return res.Body.transformToByteArray() as Promise<V>;
 	}
 
-	public async set(key: string, value: V, ttl?: number, jitter?: JitterMode | JitterFn): Promise<void> {
+	public async set(
+		key: string,
+		value: V,
+		ttl?: number | undefined,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<void> {
 		const s3Key = this.buildKey(key);
 
 		try {
 			let expiresAt: number | undefined;
+			ttl = ttl ?? this.#options.defaultTTL;
 			if (ttl !== undefined) {
 				const jitterFn = createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None);
 				expiresAt = Date.now() + Math.round(jitterFn(ttl));
@@ -140,7 +150,8 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	}
 
 	public async clearPattern(pattern: string): Promise<void> {
-		const rx = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+		const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const rx = new RegExp('^' + escapedPattern.replace(/\*/g, '.*') + '$');
 		const toDel: string[] = [];
 		for await (const k of this.keys()) {
 			if (rx.test(k)) {
