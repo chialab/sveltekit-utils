@@ -48,10 +48,6 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		return `${this.#options.keyPrefix ?? ''}${key}`;
 	}
 
-	private async isExpired(entry: CacheEntry<V>): Promise<boolean> {
-		return entry.expiresAt !== undefined && Date.now() > entry.expiresAt;
-	}
-
 	public async get(key: string): Promise<V | undefined> {
 		const s3Key = this.buildKey(key);
 		const head = await this.#client.send(
@@ -87,7 +83,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 			let expiresAt: number | undefined;
 			if (ttl !== undefined) {
 				const jitterFn = createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None);
-				expiresAt = Math.round(jitterFn(ttl));
+				expiresAt = Date.now() + Math.round(jitterFn(ttl));
 			}
 
 			await this.#client.send(
