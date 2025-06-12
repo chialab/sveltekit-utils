@@ -57,7 +57,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		}
 
 		const expiresAtStr = head.Metadata?.['expires-at'];
-		if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr)) {
+		if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr, 10)) {
 			await this.delete(key);
 			return undefined;
 		}
