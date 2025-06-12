@@ -19,11 +19,6 @@ type S3CacheOptions = {
 	defaultJitter?: JitterMode | JitterFn;
 };
 
-type CacheEntry<V extends Uint8Array> = {
-	value: V;
-	expiresAt?: number;
-};
-
 export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	readonly #options: S3CacheOptions;
 	readonly #client: S3;
@@ -146,10 +141,20 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 
 	public async clearPattern(pattern: string): Promise<void> {
 		const rx = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+		const toDel: string[] = [];
 		for await (const k of this.keys()) {
 			if (rx.test(k)) {
-				await this.delete(k);
+				toDel.push(this.buildKey(k));
 			}
+		}
+		while (toDel.length) {
+			const chunk = toDel.splice(0, 1000);
+			await this.#client.send(
+				new DeleteObjectsCommand({
+					Bucket: this.#options.bucket,
+					Delete: { Objects: chunk.map((Key) => ({ Key })) },
+				}),
+			);
 		}
 	}
 }
