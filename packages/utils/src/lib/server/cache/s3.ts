@@ -3,7 +3,6 @@ import {
 	DeleteObjectCommand,
 	DeleteObjectsCommand,
 	GetObjectCommand,
-	HeadObjectCommand,
 	ListObjectsV2Command,
 	PutObjectCommand,
 	S3,
@@ -39,32 +38,27 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		this.#client = client;
 	}
 
-	private buildKey(key: string): string {
+	#buildKey(key: string): string {
 		return `${this.#options.keyPrefix ?? ''}${key}`;
 	}
 
 	public async get(key: string): Promise<V | undefined> {
-		const s3Key = this.buildKey(key);
+		const s3Key = this.#buildKey(key);
 		try {
-			const head = await this.#client.send(
-				new HeadObjectCommand({
-					Bucket: this.#options.bucket,
-					Key: s3Key,
-				}),
-			);
-
-			const expiresAtStr = head.Metadata?.['expires-at'];
-			if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr, 10)) {
-				await this.delete(key);
-				return undefined;
-			}
-
 			const res = await this.#client.send(
 				new GetObjectCommand({
 					Bucket: this.#options.bucket,
 					Key: s3Key,
 				}),
 			);
+
+			const expiresAtStr = res.Metadata?.['expires-at'];
+			if (expiresAtStr && Date.now() > Number.parseInt(expiresAtStr, 10)) {
+				this.delete(key).catch((err) => {
+					logger.error({ key, err }, 'Got error while trying to delete expired cache key');
+				});
+				return undefined;
+			}
 
 			if (!res.Body) {
 				return undefined;
@@ -81,7 +75,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
 	): Promise<void> {
-		const s3Key = this.buildKey(key);
+		const s3Key = this.#buildKey(key);
 
 		try {
 			let expiresAt: number | undefined;
@@ -108,13 +102,13 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		await this.#client.send(
 			new DeleteObjectCommand({
 				Bucket: this.#options.bucket,
-				Key: this.buildKey(key),
+				Key: this.#buildKey(key),
 			}),
 		);
 	}
 
 	public async *keys(prefix?: string): AsyncIterableIterator<string> {
-		const fullPrefix = this.buildKey(prefix ?? '');
+		const fullPrefix = this.#buildKey(prefix ?? '');
 		let cont: string | undefined;
 		do {
 			const res = await this.#client.send(
@@ -136,7 +130,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	public async clear(prefix?: string): Promise<void> {
 		const toDel: string[] = [];
 		for await (const k of this.keys(prefix)) {
-			toDel.push(this.buildKey(k));
+			toDel.push(this.#buildKey(k));
 		}
 		while (toDel.length) {
 			const chunk = toDel.splice(0, 1000);
@@ -155,7 +149,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		const toDel: string[] = [];
 		for await (const k of this.keys()) {
 			if (rx.test(k)) {
-				toDel.push(this.buildKey(k));
+				toDel.push(this.#buildKey(k));
 			}
 		}
 		while (toDel.length) {
