@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.11
+
+### Minor Changes
+
+- 6ab2ac7: Introducing a `S3` cache adapter.
+
 ## 0.1.0-alpha.10
 
 ### Patch Changes
