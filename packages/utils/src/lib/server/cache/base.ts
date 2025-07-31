@@ -1,6 +1,6 @@
 import type { JitterFn, JitterMode } from '../../utils/misc.js';
 import type { StorageReadWriter } from '../storage.js';
-import { trace, ATTR_PEER_SERVICE } from '../telemetry.js';
+import { ATTR_PEER_SERVICE, trace } from '../telemetry.js';
 import { SpanKind } from '@opentelemetry/api';
 
 /**
