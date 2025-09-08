@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.12
+
+### Patch Changes
+
+- 87e9b31: Add `child` method to `S3` cache adapter.
+
 ## 0.1.0-alpha.11
 
 ### Minor Changes
