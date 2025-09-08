@@ -18,6 +18,13 @@ type S3CacheOptions = {
 	defaultJitter?: JitterMode | JitterFn;
 };
 
+function joinParts(...prefixes: string[]): string {
+	return prefixes
+		.filter((p) => p && p.length > 0)
+		.map((p) => p.replace(/\/+$/, '').replace(/^\/+/, ''))
+		.join('/');
+}
+
 export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	readonly #options: S3CacheOptions;
 	readonly #client: S3;
@@ -39,7 +46,21 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	}
 
 	#buildKey(key: string): string {
-		return `${this.#options.keyPrefix ?? ''}${key}`;
+		return joinParts(this.#options.keyPrefix ?? '', key);
+	}
+
+	public child<V2 extends V>(
+		keyPrefix: string,
+		options?: Partial<Omit<S3CacheOptions, 'bucket' | 'keyPrefix'>>,
+	): S3Cache<V2> {
+		return new S3Cache<V2>(
+			{
+				...this.#options,
+				...options,
+				keyPrefix: joinParts(this.#options.keyPrefix ?? '', keyPrefix),
+			},
+			this.#client,
+		);
 	}
 
 	public async get(key: string): Promise<V | undefined> {
