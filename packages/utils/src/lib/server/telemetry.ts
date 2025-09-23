@@ -18,6 +18,7 @@ export const traceDecoratorFactory = (name: string, version?: string) => {
 				const className = ctx.static ? this.name : this.constructor.name;
 
 				return tracer.startActiveSpan([className, ctx.name].filter(Boolean).join('.'), options, (span: Span): R => {
+					// NOTE: do not use `finally` to call `span.end()` because it causes a double-call if `result` is a promise, and we can't await here otherwise the decorator becomes async
 					try {
 						const result = target.call(this, ...args) as R;
 						if (result && typeof result === 'object' && 'then' in result && typeof result.then === 'function') {
@@ -39,6 +40,8 @@ export const traceDecoratorFactory = (name: string, version?: string) => {
 							);
 						}
 
+						span.end();
+
 						return result;
 					} catch (err: unknown) {
 						span.setStatus({ code: SpanStatusCode.ERROR });
@@ -46,9 +49,9 @@ export const traceDecoratorFactory = (name: string, version?: string) => {
 							span.recordException(err);
 						}
 
-						throw err;
-					} finally {
 						span.end();
+
+						throw err;
 					}
 				});
 			} as Value;
