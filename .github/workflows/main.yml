@@ -22,3 +22,4 @@ jobs:
     permissions:
       id-token: write # Required for OIDC
       contents: write # Required to create the release
+      pull-requests: write # Required to create the release PR
