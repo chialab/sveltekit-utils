@@ -27,11 +27,6 @@ jobs:
       - name: Build project
         run: pnpm run --recursive build
 
-      - name: Set auth in user .npmrc file
-        run: npm config set -L user "//registry.npmjs.org/:_authToken=${GITHUB_TOKEN}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
@@ -41,3 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true # See https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
+          NPM_TOKEN: "" # Workaround to avoid Changeset attempting to authenticate with NPM using credentials other than OIDC
