@@ -85,5 +85,10 @@
 		"type": "git",
 		"url": "git@github.com:chialab/sveltekit-utils.git",
 		"directory": "packages/utils"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org",
+		"access": "public",
+		"provenance": true
 	}
 }

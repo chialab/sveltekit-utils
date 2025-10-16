@@ -34,5 +34,4 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true # See https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
           NPM_TOKEN: "" # Workaround to avoid Changeset attempting to authenticate with NPM using credentials other than OIDC
