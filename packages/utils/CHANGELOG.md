@@ -1,5 +1,13 @@
 # @chialab/sveltekit-utils
 
+## 0.1.0-alpha.13
+
+### Patch Changes
+
+- de8f6f4: Add artifact provenance for NPM publishing.
+- Updated dependencies [de8f6f4]
+  - @chialab/isomorphic-dom@0.1.0-alpha.2
+
 ## 0.1.0-alpha.12
 
 ### Patch Changes
