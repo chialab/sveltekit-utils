@@ -1,0 +1,50 @@
+{
+	"name": "@chialab/isomorphic-dom",
+	"license": "MIT",
+	"version": "0.1.0-alpha.2",
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"node": {
+				"types": "./dist/types/server.d.ts",
+				"default": "./dist/server.js"
+			},
+			"types": "./dist/types/browser.d.ts",
+			"default": "./dist/browser.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"eslint-check": "eslint .",
+		"eslint-fix": "eslint --fix .",
+		"prettier-check": "prettier --check \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"prettier-fix": "prettier --write \"./**/*.{json,css,js,cjs,ts,svelte}\"",
+		"lint": "pnpm run eslint-check && pnpm run prettier-check",
+		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
+	},
+	"dependencies": {
+		"happy-dom": "^17.4.4"
+	},
+	"devDependencies": {
+		"@chialab/sveltekit-dev-utils": "workspace:*",
+		"@types/node": "catalog:",
+		"eslint": "catalog:",
+		"prettier": "catalog:",
+		"tslib": "catalog:",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@10.6.2+sha256.20072a1f6edd17646ea9234bf32c42d563dad37b2973e97a2dde5c17774a824d",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:chialab/sveltekit-utils.git",
+		"directory": "packages/isomorphic-dom"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org",
+		"access": "public",
+		"provenance": true
+	}
+}

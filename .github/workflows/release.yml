@@ -1,9 +1,6 @@
 name: Release
 on:
   workflow_call:
-    secrets:
-      NPM_TOKEN:
-        required: true
 
 jobs:
   release:
@@ -14,23 +11,30 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          cache: yarn
+          node-version: "lts/*"
+          cache: pnpm
 
       - name: Install project dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Build project
-        run: yarn build
+        run: pnpm run --recursive build
+
+      - name: Update NPM to latest version
+        run: npm install -g npm@latest
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: yarn changeset publish
+          publish: pnpm changeset publish
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: "" # Workaround to avoid Changeset attempting to authenticate with NPM using credentials other than OIDC

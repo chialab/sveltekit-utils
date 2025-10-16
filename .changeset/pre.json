@@ -1,0 +1,32 @@
+{
+  "mode": "exit",
+  "tag": "alpha",
+  "initialVersions": {
+    "@chialab/sveltekit-utils": "0.0.2",
+    "@chialab/sveltekit-dev-utils": "0.0.2",
+    "@chialab/isomorphic-dom": "0.1.0-alpha.1"
+  },
+  "changesets": [
+    "beige-falcons-taste",
+    "chubby-wasps-serve",
+    "dry-lions-occur",
+    "eager-zebras-kiss",
+    "few-knives-notice",
+    "fifty-drinks-bake",
+    "five-toes-live",
+    "funny-carrots-add",
+    "giant-melons-stare",
+    "great-mails-beg",
+    "hot-bats-pull",
+    "hot-spies-crash",
+    "lazy-games-serve",
+    "lemon-insects-laugh",
+    "loose-taxis-serve",
+    "modern-ways-stop",
+    "nice-ants-care",
+    "odd-candles-knock",
+    "spicy-ghosts-fry",
+    "ten-views-grab",
+    "three-ways-pay"
+  ]
+}
