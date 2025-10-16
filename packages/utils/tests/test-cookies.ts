@@ -16,7 +16,7 @@ export class InMemoryCookies implements Cookies {
 	}
 
 	delete(name: string): void {
-		this.delete(name);
+		this.#cookies.delete(name);
 	}
 
 	serialize(name: string, value: string): string {

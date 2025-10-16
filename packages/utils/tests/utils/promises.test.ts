@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 describe(isPromiseLike.name, () => {
 	const CASES = {
-		'should reckognize a resolved Promise': { expected: true, value: Promise.resolve(42) },
-		'should reckognize a pending Promise': { expected: true, value: new Promise(() => {}) },
-		'should reckognize a promise-like object': { expected: true, value: { then: () => {} } },
-		'should not reckognize a number': { expected: false, value: 42 },
-		'should not reckognize null': { expected: false, value: null },
-		'should not reckognize undefined': { expected: false, value: undefined },
-		'should not reckognize a Date': { expected: false, value: new Date() },
+		'should recognize a resolved Promise': { expected: true, value: Promise.resolve(42) },
+		'should recognize a pending Promise': { expected: true, value: new Promise(() => {}) },
+		'should recognize a promise-like object': { expected: true, value: { then: () => {} } },
+		'should not recognize a number': { expected: false, value: 42 },
+		'should not recognize null': { expected: false, value: null },
+		'should not recognize undefined': { expected: false, value: undefined },
+		'should not recognize a Date': { expected: false, value: new Date() },
 	} satisfies Record<string, { expected: boolean; value: PromiseLike<unknown> | unknown }>;
 
 	Object.entries(CASES).forEach(([label, { expected, value }]) =>
