@@ -1,9 +1,6 @@
 name: Release
 on:
   workflow_call:
-    secrets:
-      NPM_TOKEN:
-        required: true
 
 jobs:
   release:
@@ -37,4 +34,4 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true # See https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
