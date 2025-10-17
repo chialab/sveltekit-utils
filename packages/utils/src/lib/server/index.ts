@@ -2,6 +2,7 @@ export * from './cache/index.js';
 export * from './hooks/index.js';
 export * from './session.js';
 export * from './sitemap.js';
+export { traceDecoratorFactory, ATTR_PEER_SERVICE } from './telemetry.js';
 export * from './utils.js';
 
 import type { Session } from './session.js';
