@@ -1,5 +1,5 @@
-import { js2xml, type Element } from 'xml-js';
 import { gzipSync } from 'node:zlib';
+import { js2xml, type Element } from 'xml-js';
 
 const xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
@@ -18,7 +18,7 @@ const buildResponse = (xml: string, compress: boolean) => {
 		return new Response(xml, { headers });
 	}
 
-	return new Response(gzipSync(Buffer.from(xml)), {
+	return new Response(Buffer.from(gzipSync(Buffer.from(xml))), {
 		headers: { ...headers, 'Content-Encoding': 'gzip' },
 	});
 };
