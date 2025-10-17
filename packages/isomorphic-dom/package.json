@@ -26,7 +26,7 @@
 		"lint-fix-all": "pnpm run eslint-fix && pnpm run prettier-fix"
 	},
 	"dependencies": {
-		"happy-dom": "^17.6.3"
+		"happy-dom": "^20.0.4"
 	},
 	"devDependencies": {
 		"@chialab/sveltekit-dev-utils": "workspace:*",
