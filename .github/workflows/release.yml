@@ -35,6 +35,7 @@ jobs:
         with:
           publish: pnpm changeset publish
           createGithubReleases: true
+          commitMode: "github-api"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: "" # Workaround to avoid Changeset attempting to authenticate with NPM using credentials other than OIDC
