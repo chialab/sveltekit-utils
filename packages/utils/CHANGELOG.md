@@ -1,5 +1,15 @@
 # @chialab/sveltekit-utils
 
+## 0.1.1
+
+### Patch Changes
+
+- 8c28408: Upgrade dependencies.
+- dc4689b: Upgrade dependencies, wrap compressed sitemap with `Buffer.from()`.
+- Updated dependencies [8c28408]
+- Updated dependencies [dc4689b]
+  - @chialab/isomorphic-dom@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

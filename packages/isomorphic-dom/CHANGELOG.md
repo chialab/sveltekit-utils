@@ -1,5 +1,12 @@
 # @chialab/isomorphic-dom
 
+## 0.1.1
+
+### Patch Changes
+
+- 8c28408: Upgrade dependencies.
+- dc4689b: Upgrade dependencies.
+
 ## 0.1.0
 
 ### Patch Changes
