@@ -88,8 +88,8 @@ importers:
   packages/isomorphic-dom:
     dependencies:
       happy-dom:
-        specifier: ^17.6.3
-        version: 17.6.3
+        specifier: ^20.0.7
+        version: 20.0.7
     devDependencies:
       '@chialab/sveltekit-dev-utils':
         specifier: workspace:*
@@ -193,7 +193,7 @@ importers:
         version: 6.4.0(@types/node@22.18.11)
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@17.6.3)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
+        version: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@20.0.7)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
 
 packages:
 
@@ -1266,6 +1266,9 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
+  '@types/node@20.19.22':
+    resolution: {integrity: sha512-hRnu+5qggKDSyWHlnmThnUqg62l29Aj/6vcYgUaSFL9oc7DVjeWEQN3PRgdSc6F8d9QRMWkf36CLMch1Do/+RQ==}
+
   '@types/node@22.18.11':
     resolution: {integrity: sha512-Gd33J2XIrXurb+eT2ktze3rJAfAp9ZNjlBdh4SVgyrKEOADwCbdUDaK7QgJno8Ue4kcajscsKqu6n8OBG3hhCQ==}
 
@@ -1274,6 +1277,9 @@ packages:
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
+
+  '@types/whatwg-mimetype@3.0.2':
+    resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
 
   '@typescript-eslint/eslint-plugin@8.46.1':
     resolution: {integrity: sha512-rUsLh8PXmBjdiPY+Emjz9NX2yHvhS11v0SR6xNJkm5GM1MO9ea/1GoDKlHHZGrOJclL/cZ2i/vRUYVtjRhrHVQ==}
@@ -1988,8 +1994,8 @@ packages:
     resolution: {integrity: sha512-mS1lbMsxgQj6hge1XZ6p7GPhbrtFwUFYi3wRzXAC/FmYnyXMTvvI3td3rjmQ2u8ewXueaSvRPWaEcgVVOT9Jnw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
-  happy-dom@17.6.3:
-    resolution: {integrity: sha512-UVIHeVhxmxedbWPCfgS55Jg2rDfwf2BCKeylcPSqazLz5w3Kri7Q4xdBJubsr/+VUzFLh0VjIvh13RaDA2/Xug==}
+  happy-dom@20.0.7:
+    resolution: {integrity: sha512-CywLfzmYxP5OYpuAG0usFY0CpxJtwYR+w8Mms5J8W29Y2Pzf6rbfQS2M523tRZTb0oLA+URopPtnAQX2fupHZQ==}
     engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
@@ -4642,6 +4648,10 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
+  '@types/node@20.19.22':
+    dependencies:
+      undici-types: 6.21.0
+
   '@types/node@22.18.11':
     dependencies:
       undici-types: 6.21.0
@@ -4651,6 +4661,8 @@ snapshots:
 
   '@types/tough-cookie@4.0.5':
     optional: true
+
+  '@types/whatwg-mimetype@3.0.2': {}
 
   '@typescript-eslint/eslint-plugin@8.46.1(@typescript-eslint/parser@8.46.1(eslint@9.37.0)(typescript@5.9.3))(eslint@9.37.0)(typescript@5.9.3)':
     dependencies:
@@ -4754,7 +4766,7 @@ snapshots:
       magic-string: 0.30.19
       sirv: 3.0.2
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@17.6.3)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
+      vitest: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@20.0.7)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
       ws: 8.18.3
     optionalDependencies:
       playwright: 1.56.1
@@ -4779,7 +4791,7 @@ snapshots:
       std-env: 3.10.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@17.6.3)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
+      vitest: 3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@20.0.7)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))
     optionalDependencies:
       '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))(playwright@1.56.1)(vite@6.4.0(@types/node@22.18.11))(vitest@3.2.4)
     transitivePeerDependencies:
@@ -5458,9 +5470,10 @@ snapshots:
   graphql@16.11.0:
     optional: true
 
-  happy-dom@17.6.3:
+  happy-dom@20.0.7:
     dependencies:
-      webidl-conversions: 7.0.0
+      '@types/node': 20.19.22
+      '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
   has-flag@4.0.0: {}
@@ -6484,7 +6497,7 @@ snapshots:
     optionalDependencies:
       vite: 6.4.0(@types/node@22.18.11)
 
-  vitest@3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@17.6.3)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3)):
+  vitest@3.2.4(@types/node@22.18.11)(@vitest/browser@3.2.4)(happy-dom@20.0.7)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3)):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -6512,7 +6525,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.18.11
       '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@22.18.11)(typescript@5.9.3))(playwright@1.56.1)(vite@6.4.0(@types/node@22.18.11))(vitest@3.2.4)
-      happy-dom: 17.6.3
+      happy-dom: 20.0.7
       jsdom: 26.0.0
     transitivePeerDependencies:
       - jiti
@@ -6533,7 +6546,8 @@ snapshots:
       xml-name-validator: 5.0.0
     optional: true
 
-  webidl-conversions@7.0.0: {}
+  webidl-conversions@7.0.0:
+    optional: true
 
   whatwg-encoding@3.1.1:
     dependencies:
