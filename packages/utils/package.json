@@ -58,7 +58,7 @@
 	"devDependencies": {
 		"@chialab/sveltekit-dev-utils": "workspace:*",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.47.1",
+		"@sveltejs/kit": "^2.48.0",
 		"@sveltejs/package": "^2.5.4",
 		"@sveltejs/vite-plugin-svelte": "^5.1.1",
 		"@types/node": "catalog:",
