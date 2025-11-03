@@ -27,6 +27,7 @@ export class Session<T extends SessionData> {
 	static #newEmptySession<T extends SessionData>(): Session<T> {
 		const session = new this<T>(secureId(), {});
 		session.#dirty = true;
+		session.#isNew = true;
 
 		return session;
 	}
@@ -93,6 +94,7 @@ export class Session<T extends SessionData> {
 
 			await storage.set(session.id, session.#data);
 			session.#dirty = false;
+			session.#isNew = false;
 
 			logger?.debug('Session data persisted');
 		} catch (err) {
@@ -132,6 +134,8 @@ export class Session<T extends SessionData> {
 	#data: Partial<T>;
 	/** Session state. */
 	#dirty = false;
+	/** Whether session is new. */
+	#isNew = false;
 
 	protected constructor(id: string, data: Partial<T>) {
 		this.#id = id;
@@ -150,6 +154,13 @@ export class Session<T extends SessionData> {
 	 */
 	get dirty(): boolean {
 		return this.#dirty;
+	}
+
+	/**
+	 * Check if session is new (i.e. has just been initialized as opposed to restored via cookie).
+	 */
+	get isNew(): boolean {
+		return this.#isNew;
 	}
 
 	/**
