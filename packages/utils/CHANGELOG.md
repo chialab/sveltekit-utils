@@ -1,5 +1,21 @@
 # @chialab/sveltekit-utils
 
+## 0.2.0
+
+### Minor Changes
+
+- c9840cb: Add flag to differentiate newly instantiated sessions.
+- 41793dc: Upgrade dependencies.
+
+### Patch Changes
+
+- 8c28408: Upgrade dependencies.
+- dc4689b: Upgrade dependencies, wrap compressed sitemap with `Buffer.from()`.
+- Updated dependencies [8c28408]
+- Updated dependencies [dc4689b]
+- Updated dependencies [41793dc]
+  - @chialab/isomorphic-dom@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
