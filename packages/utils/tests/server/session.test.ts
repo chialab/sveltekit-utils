@@ -17,7 +17,7 @@ describe(Session.name, () => {
 
 			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
-					(session: Session<SessionData>) => session.dirty,
+					(session: Session<SessionData>) => session.dirty && session.isNew,
 				);
 				return (await session).id;
 			});
@@ -38,7 +38,11 @@ describe(Session.name, () => {
 			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
 					(session: Session<SessionData>) =>
-						!session.dirty && session.id === 'foobarbaz' && session.read('foo') === 'bar' && session.check('bar'),
+						!session.dirty &&
+						!session.isNew &&
+						session.id === 'foobarbaz' &&
+						session.read('foo') === 'bar' &&
+						session.check('bar'),
 				);
 				return (await session).id;
 			});
@@ -55,7 +59,7 @@ describe(Session.name, () => {
 
 			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
-					(session: Session<SessionData>) => session.dirty,
+					(session: Session<SessionData>) => session.dirty && session.isNew,
 				);
 				return (await session).id;
 			});
@@ -101,7 +105,7 @@ describe(Session.name, () => {
 
 			const result = Session.with(cookies, { name: 'FOO_SESSION', path: '/' }, storage, async (session) => {
 				(await expect(session).resolves.instanceOf(Session)).and.satisfies(
-					(session: Session<SessionData>) => session.dirty,
+					(session: Session<SessionData>) => session.dirty && session.isNew,
 				);
 				return (await session).id;
 			});
@@ -136,16 +140,19 @@ describe(Session.name, () => {
 		it('should return true when key is set', () => {
 			expect(session.check('foo')).equal(true);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should return false when key is present but undefined', () => {
 			expect(session.check('baz')).equal(false);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should return false when key is not present', () => {
 			expect(session.check('missing-key')).equal(false);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 	});
 
@@ -159,20 +166,24 @@ describe(Session.name, () => {
 		it('should read value', () => {
 			expect(session.read('foo')).equal('bar');
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should return undefined when key is missing', () => {
 			expect(session.read('baz')).toBeUndefined();
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should return a deep copy of any object', () => {
 			const bar = session.read('bar') as unknown[];
 			expect(bar).deep.equal(['hello world', { answer: 42 }]);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 
 			bar.push(false);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 			expect(session.read('bar'))
 				.deep.equals(['hello world', { answer: 42 }])
 				.and.not.equals(bar);
@@ -180,6 +191,7 @@ describe(Session.name, () => {
 			(bar[1] as any).answer = 43;
 			(bar[1] as any).question = 'answer to everything + 1';
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 			expect(session.read('bar'))
 				.deep.equals(['hello world', { answer: 42 }])
 				.and.not.equals(bar);
@@ -198,12 +210,14 @@ describe(Session.name, () => {
 
 			expect(session.read('foo')).equal('BAR');
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should create new key', () => {
 			session.write('baz', 'whatever');
 			expect(session.read('baz')).equal('whatever');
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should create a deep copy of any object', () => {
@@ -212,9 +226,11 @@ describe(Session.name, () => {
 
 			expect(bar).deep.equal(['hello world', { answer: 42 }]);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 
 			bar.push(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 			expect(session.read('bar'))
 				.deep.equals(['hello world', { answer: 42 }])
 				.and.not.equals(bar);
@@ -222,6 +238,7 @@ describe(Session.name, () => {
 			(bar[1] as any).answer = 43;
 			(bar[1] as any).question = 'answer to everything + 1';
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 			expect(session.read('bar'))
 				.deep.equals(['hello world', { answer: 42 }])
 				.and.not.equals(bar);
@@ -240,12 +257,14 @@ describe(Session.name, () => {
 
 			expect(session.check('foo')).equal(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should silently ignore deleting a missing key', () => {
 			session.delete('baz');
 			expect(session.check('baz')).equal(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 	});
 
@@ -260,12 +279,14 @@ describe(Session.name, () => {
 			expect(session.consume('foo')).equal('bar');
 			expect(session.check('foo')).equal(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should return undefined if value does not exist', () => {
 			expect(session.consume('baz')).toBeUndefined();
 			expect(session.check('baz')).equal(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 	});
 
@@ -284,6 +305,7 @@ describe(Session.name, () => {
 			).resolves.equal('bar');
 			expect(session.check('foo')).equal(true);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 
 		it('should generate and remember the new value when missing', async () => {
@@ -291,6 +313,7 @@ describe(Session.name, () => {
 			await expect(session.remember('bar', () => value)).resolves.equal(value);
 			expect(session.check('bar')).equal(true);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 			expect(session.read('bar')).not.equal(value);
 			expect(session.read('bar')).deep.equal(value);
 		});
@@ -300,6 +323,7 @@ describe(Session.name, () => {
 			await expect(session.remember('bar', () => Promise.reject(error))).rejects.throws(error);
 			expect(session.check('bar')).equal(false);
 			expect(session.dirty).equal(false);
+			expect(session.isNew).equal(false);
 		});
 	});
 
@@ -315,6 +339,7 @@ describe(Session.name, () => {
 
 			expect(session.check('foo')).equal(false);
 			expect(session.dirty).equal(true);
+			expect(session.isNew).equal(false);
 		});
 	});
 });
