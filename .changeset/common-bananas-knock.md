@@ -1,5 +1,5 @@
 ---
-"@chialab/sveltekit-utils": patch
+"@chialab/sveltekit-utils": minor
 ---
 
 Add OpenTelemetry for observability
