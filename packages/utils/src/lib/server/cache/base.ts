@@ -1,5 +1,7 @@
 import type { JitterFn, JitterMode } from '../../utils/misc.js';
 import type { StorageReadWriter } from '../storage.js';
+import { ATTR_PEER_SERVICE, trace } from '../telemetry.js';
+import { SpanKind } from '@opentelemetry/api';
 
 /**
  * Base class for caching.
@@ -75,6 +77,7 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
 	): Promise<V | undefined>;
+	@trace({ kind: SpanKind.CLIENT, attributes: { [ATTR_PEER_SERVICE]: 'cache' } })
 	public async remember(
 		key: string,
 		callback: () => PromiseLike<V | undefined>,

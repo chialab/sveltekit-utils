@@ -49,6 +49,8 @@
 		"@aws-sdk/client-s3": "^3.922.0",
 		"@chialab/isomorphic-dom": "workspace:*",
 		"@heyputer/kv.js": "github:fquffio/kv.js#fix/strict-mode",
+		"@opentelemetry/api": "^1.9.0",
+		"@opentelemetry/semantic-conventions": "^1.37.0",
 		"cookie": "^1.0.2",
 		"html-entities": "^2.6.0",
 		"pino": "^10.1.0",
