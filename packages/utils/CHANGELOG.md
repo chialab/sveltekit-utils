@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.3.0
+
+### Minor Changes
+
+- befe94c: Add OpenTelemetry for observability
+
 ## 0.2.0
 
 ### Minor Changes
