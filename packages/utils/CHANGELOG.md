@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.3.1
+
+### Patch Changes
+
+- b01a2c0: Update OTel semantic conventions
+
 ## 0.3.0
 
 ### Minor Changes
