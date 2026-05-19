@@ -43,7 +43,7 @@ export default ts.config(
 			},
 		},
 		rules: {
-			'curly': 'warn',
+			'curly': 'error',
 			'no-undef': 'off',
 			'@typescript-eslint/ban-ts-comment': 'warn',
 			'@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
