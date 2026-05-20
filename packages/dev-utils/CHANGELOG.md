@@ -1,5 +1,11 @@
 # @chialab/sveltekit-dev-utils
 
+## 0.2.1
+
+### Patch Changes
+
+- f569c88: Add "curly" rule with warning level to the eslint config.
+
 ## 0.2.0
 
 ### Minor Changes
