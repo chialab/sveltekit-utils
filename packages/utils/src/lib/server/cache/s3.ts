@@ -151,7 +151,6 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	}
 
 	public async clear(prefix?: string): Promise<void> {
-		this.cancelInflight(true);
 		const toDel: string[] = [];
 		for await (const k of this.keys(prefix)) {
 			toDel.push(this.#buildKey(k));
@@ -164,6 +163,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 					Delete: { Objects: chunk.map((Key) => ({ Key })) },
 				}),
 			);
+			chunk.forEach((key) => this.cancelInflight(stripPrefix(this.#options.keyPrefix ?? '', key) ?? ''));
 		}
 	}
 
@@ -184,7 +184,6 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 					Delete: { Objects: chunk.map((Key) => ({ Key })) },
 				}),
 			);
-			chunk.forEach((key) => this.cancelInflight(stripPrefix(this.#options.keyPrefix ?? '', key) ?? ''));
 		}
 	}
 }

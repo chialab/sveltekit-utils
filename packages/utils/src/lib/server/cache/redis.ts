@@ -147,7 +147,6 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 	}
 
 	public clear(prefix?: string): Promise<void> {
-		this.cancelInflight(true);
 		return this.clearPattern((prefix ?? '') + '*');
 	}
 
