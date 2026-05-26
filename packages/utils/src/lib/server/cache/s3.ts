@@ -1,4 +1,3 @@
-import { BaseCache } from './base';
 import {
 	DeleteObjectCommand,
 	DeleteObjectsCommand,
@@ -10,6 +9,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { logger } from '../../logger.js';
 import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
+import { stripPrefix } from '../../utils/string.js';
+import { BaseCache } from './base';
 
 type S3CacheOptions = {
 	bucket: string;
@@ -126,6 +127,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 				Key: this.#buildKey(key),
 			}),
 		);
+		this.cancelInflight(key);
 	}
 
 	public async *keys(prefix?: string): AsyncIterableIterator<string> {
@@ -149,6 +151,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 	}
 
 	public async clear(prefix?: string): Promise<void> {
+		this.cancelInflight(true);
 		const toDel: string[] = [];
 		for await (const k of this.keys(prefix)) {
 			toDel.push(this.#buildKey(k));
@@ -181,6 +184,7 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 					Delete: { Objects: chunk.map((Key) => ({ Key })) },
 				}),
 			);
+			chunk.forEach((key) => this.cancelInflight(stripPrefix(this.#options.keyPrefix ?? '', key) ?? ''));
 		}
 	}
 }

@@ -1,12 +1,14 @@
-import type { JitterFn, JitterMode } from '../../utils/misc.js';
+import { SpanKind } from '@opentelemetry/api';
+import { timeout, type JitterFn, type JitterMode } from '../../utils/misc.js';
 import type { StorageReadWriter } from '../storage.js';
 import { ATTR_SERVICE_PEER_NAME, trace } from '../telemetry.js';
-import { SpanKind } from '@opentelemetry/api';
 
 /**
  * Base class for caching.
  */
 export abstract class BaseCache<V> implements StorageReadWriter<V> {
+	readonly #inflight: Map<string, Promise<V | undefined>> = new Map();
+
 	/**
 	 * Read an item from the cache, if present.
 	 *
@@ -57,6 +59,14 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 	 */
 	public abstract clearPattern(pattern: string): Promise<void>;
 
+	protected cancelInflight(key: string | true): void {
+		if (key === true) {
+			this.#inflight.clear();
+		} else {
+			this.#inflight.delete(key);
+		}
+	}
+
 	/**
 	 * Read or set an item in the cache.
 	 *
@@ -70,30 +80,51 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 		callback: () => PromiseLike<V>,
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
+		inflightTimeout?: number,
 	): Promise<V>;
 	remember(
 		key: string,
 		callback: () => PromiseLike<V | undefined>,
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
+		inflightTimeout?: number,
 	): Promise<V | undefined>;
 	@trace({ kind: SpanKind.CLIENT, attributes: { [ATTR_SERVICE_PEER_NAME]: 'cache' } })
-	public async remember(
+	public remember(
 		key: string,
 		callback: () => PromiseLike<V | undefined>,
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
+		inflightTimeout = 60_000,
 	): Promise<V | undefined> {
-		const cached = await this.get(key);
-		if (cached !== undefined) {
-			return cached;
+		const inflight = this.#inflight.get(key);
+		if (inflight) {
+			return inflight;
 		}
 
-		const value = await callback();
-		if (value !== undefined) {
-			await this.set(key, value, ttl, jitter);
-		}
+		const valueDfd = (async () => {
+			const cached = await this.get(key);
+			if (cached !== undefined) {
+				return cached;
+			}
 
-		return value;
+			const value = await callback();
+			if (value !== undefined) {
+				await this.set(key, value, ttl, jitter);
+			}
+
+			return value;
+		})();
+		this.#inflight.set(key, valueDfd);
+		Promise.race([valueDfd, timeout(Math.max(1, inflightTimeout))])
+			.catch(() => {})
+			.finally(() => {
+				const inflight = this.#inflight.get(key);
+				if (inflight === valueDfd) {
+					this.#inflight.delete(key);
+				}
+			});
+
+		return valueDfd;
 	}
 }

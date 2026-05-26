@@ -130,6 +130,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		const client = await this.#connect();
 
 		await client.del(addPrefix(this.#options.keyPrefix, key));
+		this.cancelInflight(key);
 	}
 
 	public async *keys(prefix?: string): AsyncGenerator<string, void, undefined> {
@@ -146,6 +147,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 	}
 
 	public clear(prefix?: string): Promise<void> {
+		this.cancelInflight(true);
 		return this.clearPattern((prefix ?? '') + '*');
 	}
 
@@ -157,6 +159,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 				cursor = res.cursor;
 				if (res.keys.length > 0) {
 					await client.del(res.keys);
+					res.keys.forEach((key) => this.cancelInflight(stripPrefix(this.#options.keyPrefix, key) ?? ''));
 				}
 			} while (cursor !== 0);
 		};
