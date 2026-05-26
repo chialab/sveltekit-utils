@@ -49,7 +49,7 @@ export class InMemoryCache<V> extends BaseCache<V> {
 	public async get(key: string): Promise<V | undefined> {
 		const fullKey = addPrefix(this.#options.keyPrefix, key);
 		const cached = this.#inner.get(fullKey);
-		if (typeof cached === 'undefined') {
+		if (cached === undefined) {
 			return undefined;
 		}
 
@@ -149,7 +149,7 @@ export class InMemoryCache<V> extends BaseCache<V> {
 	#housekeeping(batchSize = 1000): void {
 		const now = Date.now();
 		const dropProbability =
-			typeof this.#options.maxItems !== 'undefined'
+			this.#options.maxItems !== undefined
 				? Math.max(
 						0,
 						[...this.#inner.keys()].filter((key) => key.startsWith(this.#options.keyPrefix ?? '')).length / // Number of items in this cache.
@@ -180,7 +180,7 @@ export class InMemoryCache<V> extends BaseCache<V> {
 
 			const [key, cached] = next.value;
 			const strippedKey = stripPrefix(this.#options.keyPrefix, key);
-			if (typeof strippedKey !== 'undefined' && filter(strippedKey, cached)) {
+			if (strippedKey !== undefined && filter(strippedKey, cached)) {
 				this.#inner.delete(key);
 				this.cancelInflight(strippedKey);
 			}
