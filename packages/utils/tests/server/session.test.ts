@@ -1,4 +1,4 @@
-import { Session, type SessionData } from '$lib/server';
+import { Session, type SessionData } from '$lib/server/session';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryCookies } from '../test-cookies';
 import { InMemoryStorage } from '../test-storage';

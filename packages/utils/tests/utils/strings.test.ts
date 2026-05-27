@@ -1,4 +1,4 @@
-import { addPrefix, stripPrefix } from '$lib/utils/string';
+import { addPrefix, safeBase64Decode, safeBase64Encode, stripPrefix } from '$lib/utils/string';
 import { describe, expect, it } from 'vitest';
 
 describe(addPrefix.name, () => {
@@ -33,4 +33,28 @@ describe(stripPrefix.name, () => {
 			expect(stripPrefix(prefix, value)).to.equal(expected);
 		}),
 	);
+});
+
+describe(safeBase64Encode.name, () => {
+	it('should encode a string to base64', () => {
+		expect(safeBase64Encode('hello world')).to.equal('aGVsbG8gd29ybGQ=');
+	});
+
+	it('should handle UTF-8 characters', () => {
+		expect(safeBase64Encode('こんにちは')).to.equal('44GT44KT44Gr44Gh44Gv');
+	});
+});
+
+describe(safeBase64Decode.name, () => {
+	it('should decode a base64 string', () => {
+		expect(safeBase64Decode('aGVsbG8gd29ybGQ=')).to.equal('hello world');
+	});
+
+	it('should handle UTF-8 characters', () => {
+		expect(safeBase64Decode('44GT44KT44Gr44Gh44Gv')).to.equal('こんにちは');
+	});
+
+	it('should gracefully handle invalid base64 strings', () => {
+		expect(safeBase64Decode('invalid!')).toBeUndefined();
+	});
 });

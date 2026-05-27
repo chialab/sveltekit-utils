@@ -9,13 +9,13 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        node: ["lts/*", "latest", "20", "22", "24"]
+        node: ["lts/*", "latest", "22", "24"]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -42,6 +42,6 @@ jobs:
         run: pnpm run --recursive test:unit:coverage
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

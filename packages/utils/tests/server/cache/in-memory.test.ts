@@ -1,5 +1,4 @@
 import { InMemoryCache } from '$lib/server/cache/in-memory';
-import kvjs from '@heyputer/kv.js';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 describe(InMemoryCache.name, () => {
@@ -36,112 +35,114 @@ describe(InMemoryCache.name, () => {
 	});
 
 	describe('get', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
 		});
 
 		it('should return the correct value respecting prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).get('bar')).resolves.equals('baz');
+			await expect(cache.get('bar')).resolves.equals('baz');
 		});
 
 		it('should return undefined when the key is missing, respecting prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).get('baz')).resolves.toBeUndefined();
+			await expect(cache.get('baz')).resolves.toBeUndefined();
 		});
 	});
 
 	describe('set', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
 		});
 
 		it('should overwrite the correct value respecting prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).set('bar', 'foo bar!')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['foo:bar', 'bar', 'baz']);
-			expect(store.get('bar')).to.equals('hello');
-			expect(store.get('foo:bar')).to.equals('foo bar!');
+			await expect(cache.set('bar', 'foo bar!')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['foo:bar', 'bar', 'baz']);
+			expect(store.get('bar')?.value).to.equals('hello');
+			expect(store.get('foo:bar')?.value).to.equals('foo bar!');
 		});
 
 		it('should create a new value respecting prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).set('baz', 'foo bar!')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar', 'foo:baz']);
-			expect(store.keys('*')).to.have.members(['foo:bar', 'foo:baz', 'bar', 'baz']);
-			expect(store.get('baz')).to.equals('world!');
-			expect(store.get('foo:baz')).to.equals('foo bar!');
-			expect(store.ttl('foo:baz')).to.equals(-1);
+			await expect(cache.set('baz', 'foo bar!')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar', 'foo:baz']);
+			expect([...store.keys()]).to.have.members(['foo:bar', 'foo:baz', 'bar', 'baz']);
+			expect(store.get('baz')?.value).to.equals('world!');
+			expect(store.get('foo:baz')?.value).to.equals('foo bar!');
+			expect(store.get('foo:baz')?.expiresAt).toBeUndefined();
 		});
 
 		it('should create a new value respecting prefix with the requested TTL', async () => {
-			await expect((<InMemoryCache<unknown>>cache).set('baz', 'foo bar!', 3)).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar', 'foo:baz']);
-			expect(store.keys('*')).to.have.members(['foo:bar', 'foo:baz', 'bar', 'baz']);
-			expect(store.get('baz')).to.equals('world!');
-			expect(store.get('foo:baz')).to.equals('foo bar!');
-			expect(store.ttl('foo:baz')).to.be.greaterThan(0).and.lessThanOrEqual(3);
+			await expect(cache.set('baz', 'foo bar!', 3)).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar', 'foo:baz']);
+			expect([...store.keys()]).to.have.members(['foo:bar', 'foo:baz', 'bar', 'baz']);
+			expect(store.get('baz')?.value).to.equals('world!');
+			expect(store.get('foo:baz')?.value).to.equals('foo bar!');
+			expect(store.get('foo:baz')?.expiresAt)
+				.to.be.greaterThan(0)
+				.and.lessThanOrEqual(Date.now() + 3000);
 		});
 	});
 
 	describe('delete', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
 		});
 
 		it('should delete the correct value respecting prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).delete('bar')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.not.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz']);
-			expect(store.get('bar')).to.equals('hello');
+			await expect(cache.delete('bar')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.not.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['bar', 'baz']);
+			expect(store.get('bar')?.value).to.equals('hello');
 			expect(store.get('foo:bar')).toBeUndefined();
 		});
 
 		it('should silently ignore request to delete an inexistent key', async () => {
-			await expect((<InMemoryCache<unknown>>cache).delete('baz')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['foo:bar', 'bar', 'baz']);
-			expect(store.get('baz')).to.equals('world!');
+			await expect(cache.delete('baz')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['foo:bar', 'bar', 'baz']);
+			expect(store.get('baz')?.value).to.equals('world!');
 			expect(store.get('foo:baz')).toBeUndefined();
 		});
 	});
 
 	describe('keys', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
-			store.set('foo:baz:1', 'one baz');
-			store.set('foo:baz:2', 'two bazs');
-			store.set('foo:baz:3', 'three bazs');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
+			store.set('foo:baz:1', { value: 'one baz' });
+			store.set('foo:baz:2', { value: 'two bazs' });
+			store.set('foo:baz:3', { value: 'three bazs' });
 		});
 
 		it('should list all the keys in the cache respecting the base prefix', async () => {
 			const keys = [];
-			for await (const key of (<InMemoryCache<unknown>>cache).keys()) {
+			for await (const key of cache.keys()) {
 				keys.push(key);
 			}
 
@@ -150,7 +151,7 @@ describe(InMemoryCache.name, () => {
 
 		it('should list all the keys in the cache that have the requested prefix, including the base', async () => {
 			const keys = [];
-			for await (const key of (<InMemoryCache<unknown>>cache).keys('baz:')) {
+			for await (const key of cache.keys('baz:')) {
 				keys.push(key);
 			}
 
@@ -159,76 +160,86 @@ describe(InMemoryCache.name, () => {
 	});
 
 	describe('clear', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
-			store.set('foo:baz:1', 'one baz');
-			store.set('foo:baz:2', 'two bazs');
-			store.set('foo:baz:3', 'three bazs');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
+			store.set('foo:baz:1', { value: 'one baz' });
+			store.set('foo:baz:2', { value: 'two bazs' });
+			store.set('foo:baz:3', { value: 'three bazs' });
 		});
 
 		it('should delete all keys in the cache', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clear()).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members([]);
-			expect(store.keys('*')).to.have.members(['bar', 'baz']);
+			await expect(cache.clear()).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members([]);
+			expect([...store.keys()]).to.have.members(['bar', 'baz']);
 		});
 
 		it('should delete all keys in the cache with a requested prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clear('baz:')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz', 'foo:bar']);
+			await expect(cache.clear('baz:')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['bar', 'baz', 'foo:bar']);
 		});
 
 		it('should silently ignore request to clear an inexistent prefix', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clear('non-existent-prefix:')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz', 'foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
+			await expect(cache.clear('non-existent-prefix:')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members([
+				'foo:bar',
+				'foo:baz:1',
+				'foo:baz:2',
+				'foo:baz:3',
+			]);
+			expect([...store.keys()]).to.have.members(['bar', 'baz', 'foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
 		});
 	});
 
 	describe('clearPattern', () => {
-		const store = new kvjs();
+		const store = new Map<string, { value: unknown; expiresAt?: number }>();
 		// @ts-expect-error We're deliberately using a private constructor here.
 		const cache = new InMemoryCache<unknown>({ keyPrefix: 'foo:' }, store);
 
 		beforeEach(() => {
-			store.flushall();
-			store.set('bar', 'hello');
-			store.set('baz', 'world!');
-			store.set('foo:bar', 'baz');
-			store.set('foo:baz:1', 'one baz');
-			store.set('foo:baz:2', 'two bazs');
-			store.set('foo:baz:3', 'three bazs');
+			store.clear();
+			store.set('bar', { value: 'hello' });
+			store.set('baz', { value: 'world!' });
+			store.set('foo:bar', { value: 'baz' });
+			store.set('foo:baz:1', { value: 'one baz' });
+			store.set('foo:baz:2', { value: 'two bazs' });
+			store.set('foo:baz:3', { value: 'three bazs' });
 		});
 
 		it('should delete all keys in the cache', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clearPattern('*')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members([]);
-			expect(store.keys('*')).to.have.members(['bar', 'baz']);
+			await expect(cache.clearPattern('*')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members([]);
+			expect([...store.keys()]).to.have.members(['bar', 'baz']);
 		});
 
 		it('should delete all keys in the cache with the requested pattern', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clearPattern('baz:*')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz', 'foo:bar']);
+			await expect(cache.clearPattern('baz:*')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['bar', 'baz', 'foo:bar']);
 		});
 
-		it('should delete all keys in the cache with the requested  with multiple wildcards', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clearPattern('*:*')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz', 'foo:bar']);
+		it('should delete all keys in the cache with the requested pattern with multiple wildcards', async () => {
+			await expect(cache.clearPattern('*:*')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members(['foo:bar']);
+			expect([...store.keys()]).to.have.members(['bar', 'baz', 'foo:bar']);
 		});
 
 		it('should silently ignore request to clear an inexistent pattern', async () => {
-			await expect((<InMemoryCache<unknown>>cache).clearPattern('non-existent-prefix:*')).resolves.toBeUndefined();
-			expect(store.keys('foo:*')).to.have.members(['foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
-			expect(store.keys('*')).to.have.members(['bar', 'baz', 'foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
+			await expect(cache.clearPattern('non-existent-prefix:*')).resolves.toBeUndefined();
+			expect([...store.keys()].filter((key) => key.startsWith('foo:'))).to.have.members([
+				'foo:bar',
+				'foo:baz:1',
+				'foo:baz:2',
+				'foo:baz:3',
+			]);
+			expect([...store.keys()]).to.have.members(['bar', 'baz', 'foo:bar', 'foo:baz:1', 'foo:baz:2', 'foo:baz:3']);
 		});
 	});
 });

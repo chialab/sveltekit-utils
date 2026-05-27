@@ -22,3 +22,21 @@ export const stripPrefix = (prefix: string | undefined, value: string): string |
 
 	return value.substring(prefix.length);
 };
+
+/**
+ * Safely encode a string to base64, ensuring that the input is treated as UTF-8 and not ASCII.
+ * @param str Input string.
+ */
+export const safeBase64Encode = (str: string): string => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+
+/**
+ * Safely decode a base64 string, ensuring that the output is treated as UTF-8 and not ASCII.
+ * @param str Base64-encoded string.
+ */
+export const safeBase64Decode = (str: string): string | undefined => {
+	try {
+		return new TextDecoder().decode(Uint8Array.from(atob(str), (c) => c.charCodeAt(0)));
+	} catch {
+		return undefined;
+	}
+};
