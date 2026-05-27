@@ -6,7 +6,7 @@ onlyBuiltDependencies:
 
 catalog:
   "@types/node": ^25.9.1
-  eslint: ^9.39.0
+  eslint: ^10.4.0
   playwright: ^1.60.0
   prettier: ^3.6.2
   stylelint: ^17.12.0
