@@ -1,5 +1,18 @@
 # @chialab/sveltekit-utils
 
+## 0.4.0
+
+### Minor Changes
+
+- 9575f9f: Add methods to safely encode/decode UTF-8 strings in Base64.
+- fd733cc: Make sure `cache.remember()` does not run multiple instances concurrently.
+
+### Patch Changes
+
+- 3e19ff6: Upgrade dependencies.
+- Updated dependencies [3e19ff6]
+  - @chialab/isomorphic-dom@0.2.1
+
 ## 0.3.1
 
 ### Patch Changes

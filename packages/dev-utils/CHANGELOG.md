@@ -1,5 +1,11 @@
 # @chialab/sveltekit-dev-utils
 
+## 0.2.2
+
+### Patch Changes
+
+- 3e19ff6: Upgrade dependencies.
+
 ## 0.2.1
 
 ### Patch Changes
