@@ -1,5 +1,12 @@
 # @chialab/sveltekit-utils
 
+## 0.4.1
+
+### Patch Changes
+
+- bb84838: Move pino-pretty to dependencies
+- cb79217: Fix `base.js` import with extension.
+
 ## 0.4.0
 
 ### Minor Changes
