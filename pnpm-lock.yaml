@@ -16,7 +16,7 @@ catalogs:
       specifier: ^1.60.0
       version: 1.60.0
     prettier:
-      specifier: ^3.6.2
+      specifier: ^3.8.3
       version: 3.8.3
     stylelint:
       specifier: ^17.12.0
