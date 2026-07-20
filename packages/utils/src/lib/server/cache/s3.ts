@@ -10,7 +10,7 @@ import {
 import { logger } from '../../logger.js';
 import { createJitter, JitterMode, type JitterFn } from '../../utils/misc.js';
 import { stripPrefix } from '../../utils/string.js';
-import { BaseCache } from './base';
+import { BaseCache } from './base.js';
 
 type S3CacheOptions = {
 	bucket: string;
