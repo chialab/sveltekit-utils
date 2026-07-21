@@ -14,10 +14,7 @@ export const isInternalUrl = (url: URL | string, base: URL | string): boolean =>
 
 type StringableSearchParam = string | number;
 type SearchParamStruct =
-	| StringableSearchParam
-	| readonly SearchParamStruct[]
-	| { [x: string]: SearchParamStruct }
-	| undefined;
+	StringableSearchParam | readonly SearchParamStruct[] | { [x: string]: SearchParamStruct } | undefined;
 
 export type EncodableQueryParams = Record<string, SearchParamStruct>;
 type FlattenedQueryParams = [string, string | undefined][];
