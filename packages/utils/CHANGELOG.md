@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.4.2
+
+### Patch Changes
+
+- 3fb98d0: Replace `$app/environment` import with `esm-env`
+
 ## 0.4.1
 
 ### Patch Changes
