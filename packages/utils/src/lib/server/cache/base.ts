@@ -127,4 +127,13 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 
 		return valueDfd;
 	}
+
+	/**
+	 * Close the cache, releasing any held resources.
+	 *
+	 * @returns A promise that resolves once the cache is closed.
+	 */
+	dispose(): Promise<void> {
+		return Promise.resolve();
+	}
 }

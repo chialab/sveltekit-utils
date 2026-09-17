@@ -168,4 +168,10 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 			'masters' in client ? client.masters.map(async ({ client }) => scanNode(await client!)) : [scanNode(client)],
 		);
 	}
+
+	async dispose(): Promise<void> {
+		// Close the Redis client connection if it exists
+		await this.#client?.quit();
+		return super.dispose();
+	}
 }
