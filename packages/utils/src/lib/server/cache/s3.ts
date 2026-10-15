@@ -120,6 +120,14 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 		}
 	}
 
+	public setNx(): Promise<boolean> {
+		return Promise.reject(new Error('S3Cache does not support `setNx`'));
+	}
+
+	public increment(): Promise<number> {
+		return Promise.reject(new Error('S3Cache does not support `increment`'));
+	}
+
 	public async delete(key: string): Promise<void> {
 		await this.#client.send(
 			new DeleteObjectCommand({
@@ -128,6 +136,10 @@ export class S3Cache<V extends Uint8Array = Uint8Array> extends BaseCache<V> {
 			}),
 		);
 		this.cancelInflight(key);
+	}
+
+	public deleteIfEquals(): Promise<boolean> {
+		return Promise.reject(new Error('S3Cache does not support `deleteIfEquals`'));
 	}
 
 	public async *keys(prefix?: string): AsyncIterableIterator<string> {

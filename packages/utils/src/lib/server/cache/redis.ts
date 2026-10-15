@@ -126,11 +126,101 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		}
 	}
 
+	public async setNx(
+		key: string,
+		value: V | Jsonify<V>,
+		ttl?: number | undefined,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<boolean> {
+		const client = await this.#connect();
+		const val = JSON.stringify(value);
+		try {
+			let result: string | null;
+			if (ttl === undefined) {
+				result = await client.set(addPrefix(this.#options.keyPrefix, key), val, {
+					NX: true,
+				});
+			} else {
+				const jitterFn = createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None);
+				result = await client.set(addPrefix(this.#options.keyPrefix, key), val, {
+					NX: true,
+					PX: Math.round(jitterFn(ttl) * 1000),
+				});
+			}
+
+			return result === 'OK';
+		} catch (err) {
+			logger.error({ key, err }, 'Got error while trying to setNx cache key');
+			return false;
+		}
+	}
+
+	public async increment(
+		key: string,
+		by?: number,
+		ttl?: number,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<number> {
+		const client = await this.#connect();
+		const script = `
+local existed = redis.call('EXISTS', KEYS[1])
+local value = redis.call('INCRBY', KEYS[1], ARGV[1])
+if existed == 0 and ARGV[2] ~= '' then
+	redis.call('EXPIRE', KEYS[1], ARGV[2])
+end
+return value
+`;
+
+		try {
+			let result: unknown;
+			if (ttl === undefined) {
+				result = await client.eval(script, {
+					keys: [addPrefix(this.#options.keyPrefix, key)],
+					arguments: [String(by ?? 1), ''],
+				});
+			} else {
+				const jitterFn = createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None);
+				result = await client.eval(script, {
+					keys: [addPrefix(this.#options.keyPrefix, key)],
+					arguments: [String(by ?? 1), String(Math.round(jitterFn(ttl)))],
+				});
+			}
+
+			return Number(result);
+		} catch (err) {
+			logger.error({ key, err }, 'Got error while trying to increment cache key');
+			throw err;
+		}
+	}
+
 	public async delete(key: string): Promise<void> {
 		const client = await this.#connect();
 
 		await client.del(addPrefix(this.#options.keyPrefix, key));
 		this.cancelInflight(key);
+	}
+
+	public async deleteIfEquals(key: string, value: string): Promise<boolean> {
+		const client = await this.#connect();
+		try {
+			const result = await client.eval(
+				`
+if redis.call('GET', KEYS[1]) == ARGV[1] then
+	return redis.call('DEL', KEYS[1])
+end
+return 0
+`,
+				{
+					keys: [addPrefix(this.#options.keyPrefix, key)],
+					arguments: [value],
+				},
+			);
+
+			return Number(result) === 1;
+		} catch (err) {
+			logger.error({ key, err }, 'Got error while trying to deleteIfEquals cache key');
+			return false;
+		}
 	}
 
 	public async *keys(prefix?: string): AsyncGenerator<string, void, undefined> {
@@ -172,6 +262,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 	async dispose(): Promise<void> {
 		// Close the Redis client connection if it exists
 		await this.#client?.quit();
+
 		return super.dispose();
 	}
 }
