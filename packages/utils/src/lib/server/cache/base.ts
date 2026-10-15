@@ -32,11 +32,52 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 	): Promise<void>;
 
 	/**
+	 * Atomically set a key only if it does not exist yet.
+	 *
+	 * @param key Key.
+	 * @param value Value to store as is.
+	 * @param ttl Time-to-live, expressed as number of seconds from current time.
+	 * @param jitter Jitter to apply to TTL. By default, no jittering is applied.
+	 * @returns `true` if the key was set, `false` if it already existed.
+	 */
+	public abstract setNx(
+		key: string,
+		value: V,
+		ttl?: number | undefined,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<boolean>;
+
+	/**
+	 * Atomically increment a numeric counter. The TTL is set only when the key is created, so the window is fixed.
+	 *
+	 * @param key Key.
+	 * @param by Amount to add. Defaults to `1`.
+	 * @param ttl Time-to-live, expressed as number of seconds from current time, applied when the key is created.
+	 * @param jitter Jitter to apply to TTL. By default, no jittering is applied.
+	 * @returns The value after the increment.
+	 */
+	public abstract increment(
+		key: string,
+		by?: number,
+		ttl?: number | undefined,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<number>;
+
+	/**
 	 * Remove an item from cache.
 	 *
 	 * @param key Key.
 	 */
 	public abstract delete(key: string): Promise<void>;
+
+	/**
+	 * Atomically delete a key only if its value equals the given one.
+	 *
+	 * @param key Key.
+	 * @param value Expected value.
+	 * @returns `true` if the key was deleted.
+	 */
+	public abstract deleteIfEquals(key: string, value: string): Promise<boolean>;
 
 	/**
 	 * Iterate through keys in this cache.

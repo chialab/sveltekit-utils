@@ -82,12 +82,79 @@ export class InMemoryCache<V> extends BaseCache<V> {
 		this.#housekeeping();
 	}
 
+	public async setNx(
+		key: string,
+		value: V,
+		ttl?: number | undefined,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<boolean> {
+		const fullKey = addPrefix(this.#options.keyPrefix, key);
+		const cached = this.#inner.get(fullKey);
+		if (cached !== undefined && InMemoryCache.#isValid(cached)) {
+			return false;
+		}
+
+		this.#inner.set(fullKey, {
+			value: value as V,
+			expiresAt:
+				ttl !== undefined
+					? Date.now() + createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None)(ttl * 1000)
+					: undefined,
+		});
+		this.#housekeeping();
+
+		return true;
+	}
+
+	public async increment(
+		key: string,
+		by?: number,
+		ttlSeconds?: number,
+		jitter?: JitterMode | JitterFn | undefined,
+	): Promise<number> {
+		const fullKey = addPrefix(this.#options.keyPrefix, key);
+		const cached = this.#inner.get(fullKey);
+		const current = cached !== undefined && InMemoryCache.#isValid(cached) ? cached : undefined;
+		const currentValue = current?.value ?? 0;
+		if (typeof currentValue !== 'number') {
+			throw new Error(`Cannot increment non-numeric value at key "${key}"`);
+		}
+
+		const next = currentValue + (by ?? 1);
+		this.#inner.set(fullKey, {
+			value: next as V,
+			expiresAt:
+				current !== undefined
+					? current.expiresAt
+					: ttlSeconds !== undefined
+						? Date.now() + createJitter(jitter ?? this.#options.defaultJitter ?? JitterMode.None)(ttlSeconds * 1000)
+						: undefined,
+		});
+		this.#housekeeping();
+
+		return next;
+	}
+
 	public async delete(key: string): Promise<void> {
 		const fullKey = addPrefix(this.#options.keyPrefix, key);
 		this.#inner.delete(fullKey);
 		this.cancelInflight(key);
 
 		this.#housekeeping();
+	}
+
+	public async deleteIfEquals(key: string, value: string): Promise<boolean> {
+		const fullKey = addPrefix(this.#options.keyPrefix, key);
+		const cached = this.#inner.get(fullKey);
+		if (cached === undefined || !InMemoryCache.#isValid(cached) || cached.value !== value) {
+			return false;
+		}
+
+		this.#inner.delete(fullKey);
+		this.cancelInflight(key);
+		this.#housekeeping();
+
+		return true;
 	}
 
 	public async *keys(prefix?: string): AsyncGenerator<string, void, undefined> {
