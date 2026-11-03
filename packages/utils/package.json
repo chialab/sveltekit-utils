@@ -25,6 +25,10 @@
 		"./utils": {
 			"types": "./dist/utils/index.d.ts",
 			"default": "./dist/utils/index.js"
+		},
+		"./utils/html": {
+			"types": "./dist/utils/html.d.ts",
+			"default": "./dist/utils/html.js"
 		}
 	},
 	"scripts": {
