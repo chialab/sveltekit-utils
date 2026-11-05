@@ -26,7 +26,7 @@
 			"types": "./dist/utils/index.d.ts",
 			"default": "./dist/utils/index.js"
 		},
-		"./utils/*.js": {
+		"./utils/*": {
 			"types": "./dist/utils/*.d.ts",
 			"default": "./dist/utils/*.js"
 		}
