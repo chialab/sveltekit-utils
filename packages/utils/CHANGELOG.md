@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.4.4
+
+### Patch Changes
+
+- fc07aca: Expose `./utils/*.js` entries, so single utils like `stripHtml` can be imported outside SvelteKit without pulling `@sveltejs/kit` and `$app/environment`
+
 ## 0.4.3
 
 ### Patch Changes
