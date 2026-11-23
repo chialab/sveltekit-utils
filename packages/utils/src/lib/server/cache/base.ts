@@ -10,6 +10,20 @@ export abstract class BaseCache<V> implements StorageReadWriter<V> {
 	readonly #inflight: Map<string, Promise<V | undefined>> = new Map();
 
 	/**
+	 * Create a cache sharing the same backend with a key prefix.
+	 *
+	 * @param keyPrefix Prefix applied to all keys.
+	 * @param options Child cache options.
+	 */
+	public abstract child<V2 extends V>(
+		keyPrefix: string,
+		options?: {
+			defaultTTL?: number;
+			defaultJitter?: JitterMode | JitterFn;
+		},
+	): BaseCache<V2>;
+
+	/**
 	 * Read an item from the cache, if present.
 	 *
 	 * @param key Key.

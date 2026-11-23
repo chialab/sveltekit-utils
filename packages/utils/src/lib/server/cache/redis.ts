@@ -18,14 +18,6 @@ type RedisCacheOptions = {
 	defaultJitter?: JitterMode | JitterFn;
 };
 
-type Jsonify<T> = T extends { toJSON(): infer U }
-	? U
-	: T extends Promise<unknown>
-		? never
-		: T extends object
-			? { [k in keyof T]: Jsonify<T[k]> }
-			: T;
-
 type RedisClientOrCluster =
 	| RedisClientType<RedisDefaultModules, Record<string, never>, Record<string, never>>
 	| RedisClusterType<RedisDefaultModules, Record<string, never>, Record<string, never>>;
@@ -33,7 +25,7 @@ type RedisClientOrClusterOptions =
 	| RedisClientOptions<RedisDefaultModules, Record<string, never>, Record<string, never>>
 	| RedisClusterOptions<RedisDefaultModules, Record<string, never>, Record<string, never>>;
 
-export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
+export class RedisCache<V> extends BaseCache<V> {
 	readonly #options: RedisCacheOptions;
 	readonly #client: RedisClientOrCluster;
 	#connectPromise?: Promise<unknown>;
@@ -84,7 +76,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		);
 	}
 
-	public async get(key: string): Promise<Jsonify<V> | undefined> {
+	public async get(key: string): Promise<V | undefined> {
 		const client = await this.#connect();
 		const val = await client.get(addPrefix(this.#options.keyPrefix, key));
 		if (val === null) {
@@ -92,7 +84,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 		}
 
 		try {
-			return JSON.parse(val) satisfies Jsonify<V>;
+			return JSON.parse(val) as V;
 		} catch (err) {
 			if (!(err instanceof SyntaxError)) {
 				throw err;
@@ -107,7 +99,7 @@ export class RedisCache<V> extends BaseCache<V | Jsonify<V>> {
 
 	public async set(
 		key: string,
-		value: V | Jsonify<V>,
+		value: V,
 		ttl?: number | undefined,
 		jitter?: JitterMode | JitterFn | undefined,
 	): Promise<void> {
