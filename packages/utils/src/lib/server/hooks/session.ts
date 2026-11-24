@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import type { Logger } from 'pino';
 import { Session, type SessionCookieOptions } from '../session.js';
 import type { StorageReadWriter } from '../storage.js';

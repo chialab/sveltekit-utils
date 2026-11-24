@@ -1,4 +1,4 @@
-import { backoffRetry, getRandomInt, JitterMode, timeout } from '$lib/utils/misc';
+import { backoffRetry, getRandomInt, JitterMode, timeout } from '#lib/utils/misc.js';
 import { describe, expect, it } from 'vitest';
 
 describe(timeout.name, { retry: 3 }, () => {

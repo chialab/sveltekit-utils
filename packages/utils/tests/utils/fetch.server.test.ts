@@ -1,4 +1,4 @@
-import { handleFetchError } from '$lib/utils/fetch';
+import { handleFetchError } from '#lib/utils/fetch.js';
 import { type HttpError, isHttpError } from '@sveltejs/kit';
 import pino from 'pino';
 import { describe, expect, it } from 'vitest';

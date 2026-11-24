@@ -1,4 +1,4 @@
-import { Sitemap, SitemapIndex } from '$lib/server/sitemap';
+import { Sitemap, SitemapIndex } from '#lib/server/sitemap.js';
 import { gunzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { xml2js } from 'xml-js';

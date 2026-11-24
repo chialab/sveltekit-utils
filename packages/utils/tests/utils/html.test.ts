@@ -1,4 +1,4 @@
-import { stripHtml } from '$lib/utils/html';
+import { stripHtml } from '#lib/utils/html.js';
 import { describe, expect, it } from 'vitest';
 
 describe(stripHtml.name, async () => {

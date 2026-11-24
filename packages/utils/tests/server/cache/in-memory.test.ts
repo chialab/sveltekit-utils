@@ -1,6 +1,6 @@
-import type { BaseCache } from '$lib/server/cache/base';
-import { InMemoryCache } from '$lib/server/cache/in-memory';
-import type { RedisCache } from '$lib/server/cache/redis';
+import type { BaseCache } from '#lib/server/cache/base.js';
+import { InMemoryCache } from '#lib/server/cache/in-memory.js';
+import type { RedisCache } from '#lib/server/cache/redis.js';
 import { beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
 
 describe(InMemoryCache.name, () => {

@@ -1,4 +1,4 @@
-import type { StorageReadWriter } from '$lib/server/storage';
+import type { StorageReadWriter } from '#lib/server/storage.js';
 
 export class InMemoryStorage<T> implements StorageReadWriter<T> {
 	#map = new Map<string, T>();

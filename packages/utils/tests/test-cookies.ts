@@ -15,6 +15,10 @@ export class InMemoryCookies implements Cookies {
 		this.#cookies.set(name, value);
 	}
 
+	parse(): never {
+		throw new Error('Not implemented');
+	}
+
 	delete(name: string): void {
 		this.#cookies.delete(name);
 	}
