@@ -4,7 +4,7 @@ import {
 	isInternalUrl,
 	withQueryParams,
 	type EncodableQueryParams,
-} from '$lib/utils/url';
+} from '#lib/utils/url.js';
 import { isHttpError, type HttpError } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
 

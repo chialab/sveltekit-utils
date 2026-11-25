@@ -1,7 +1,7 @@
-import { BaseCache } from '$lib/server/cache/base';
-import { InMemoryCache } from '$lib/server/cache/in-memory';
-import { asyncIterableToArray } from '$lib/utils/collections';
-import { timeout } from '$lib/utils/misc';
+import { BaseCache } from '#lib/server/cache/base.js';
+import { InMemoryCache } from '#lib/server/cache/in-memory.js';
+import { asyncIterableToArray } from '#lib/utils/collections.js';
+import { timeout } from '#lib/utils/misc.js';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 describe(BaseCache.name, () => {

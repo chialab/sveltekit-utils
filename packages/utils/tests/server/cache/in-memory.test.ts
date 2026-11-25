@@ -1,9 +1,20 @@
-import { InMemoryCache } from '$lib/server/cache/in-memory';
-import { beforeEach, describe, expect, it } from 'vitest';
+import type { BaseCache } from '#lib/server/cache/base.js';
+import { InMemoryCache } from '#lib/server/cache/in-memory.js';
+import type { RedisCache } from '#lib/server/cache/redis.js';
+import { beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
 
 describe(InMemoryCache.name, () => {
 	it('should create an in-memory cache', () => {
 		expect(InMemoryCache.init({ defaultTTL: 200 })).to.be.an.instanceOf(InMemoryCache);
+	});
+
+	it('should expose a backend-independent cache type', () => {
+		const createChild = (cache: BaseCache<unknown>): BaseCache<{ answer: number }> =>
+			cache.child<{ answer: number }>('child:');
+
+		expectTypeOf<RedisCache<{ answer: number }>>().toExtend<BaseCache<{ answer: number }>>();
+		expectTypeOf<ReturnType<typeof createChild>>().toExtend<BaseCache<{ answer: number }>>();
+		expect(createChild).toBeTypeOf('function');
 	});
 
 	describe('child', () => {

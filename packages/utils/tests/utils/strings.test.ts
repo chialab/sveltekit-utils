@@ -1,4 +1,4 @@
-import { addPrefix, safeBase64Decode, safeBase64Encode, stripPrefix } from '$lib/utils/string';
+import { addPrefix, safeBase64Decode, safeBase64Encode, stripPrefix } from '#lib/utils/string.js';
 import { describe, expect, it } from 'vitest';
 
 describe(addPrefix.name, () => {

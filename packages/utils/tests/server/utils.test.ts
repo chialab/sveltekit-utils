@@ -1,4 +1,4 @@
-import { computeHash, secureId, withTmpDir } from '$lib/server/utils';
+import { computeHash, secureId, withTmpDir } from '#lib/server/utils.js';
 import { existsSync, statSync } from 'node:fs';
 import { basename } from 'node:path';
 import { describe, expect, it } from 'vitest';

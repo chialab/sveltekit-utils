@@ -1,4 +1,4 @@
-import { asyncIterableToArray, entries, group, sift } from '$lib/utils/collections';
+import { asyncIterableToArray, entries, group, sift } from '#lib/utils/collections.js';
 import { describe, expect, it } from 'vitest';
 
 describe(group.name, () => {

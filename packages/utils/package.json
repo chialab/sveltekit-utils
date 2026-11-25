@@ -14,9 +14,7 @@
 		},
 		"./server": {
 			"types": "./dist/server/index.d.ts",
-			"node": "./dist/server/index.js",
-			"svelte": null,
-			"default": null
+			"node": "./dist/server/index.js"
 		},
 		"./logger": {
 			"types": "./dist/logger.d.ts",
@@ -63,10 +61,12 @@
 		"xml-js": "^1.6.11"
 	},
 	"devDependencies": {
+		"@babel/plugin-proposal-decorators": "^8.0.2",
 		"@chialab/sveltekit-dev-utils": "workspace:*",
-		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.61.1",
-		"@sveltejs/package": "^2.5.7",
+		"@rolldown/plugin-babel": "^0.2.4",
+		"@sveltejs/adapter-static": "^4.0.0",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/package": "^3.0.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/node": "catalog:",
 		"@vitest/browser": "^4.1.7",
@@ -76,17 +76,17 @@
 		"playwright": "catalog:",
 		"prettier": "catalog:",
 		"prettier-plugin-svelte": "^4.0.1",
-		"svelte": "^5.55.9",
+		"svelte": "^5.57.1",
 		"svelte-check": "^4.4.8",
 		"tslib": "catalog:",
 		"typescript": "catalog:",
-		"vite": "^7.0.12",
+		"vite": "^8.0.12",
 		"vitest": "^4.1.7"
 	},
 	"packageManager": "pnpm@10.6.2+sha256.20072a1f6edd17646ea9234bf32c42d563dad37b2973e97a2dde5c17774a824d",
 	"peerDependencies": {
-		"@sveltejs/kit": "^2.0.0",
-		"svelte": "^4.2.1 || ^5.0.0"
+		"@sveltejs/kit": "^3.0.0",
+		"svelte": "^5.0.0"
 	},
 	"repository": {
 		"type": "git",
@@ -97,5 +97,9 @@
 		"registry": "https://registry.npmjs.org",
 		"access": "public",
 		"provenance": true
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }

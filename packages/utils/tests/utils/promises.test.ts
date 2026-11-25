@@ -1,4 +1,4 @@
-import { asyncIterablePool, isPromiseLike, lazyLoad, mapIterator } from '$lib/utils/promises';
+import { asyncIterablePool, isPromiseLike, lazyLoad, mapIterator } from '#lib/utils/promises.js';
 import { describe, expect, it } from 'vitest';
 
 describe(isPromiseLike.name, () => {
