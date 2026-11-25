@@ -25,4 +25,4 @@ export const required = (value: string | undefined): string => {
 /**
  * Required string, only enforced when the app runs.
  */
-export const requiredAtRuntime = (value: string | undefined): string => (building ? (value ?? '') : required(value));
+export const requiredAtRuntime = (value: string | undefined): string => (building ? optional(value) : required(value));
