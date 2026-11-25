@@ -1,5 +1,17 @@
 # @chialab/sveltekit-utils
 
+## 0.5.0
+
+### Minor Changes
+
+- 22fff78: **Breaking:** require SvelteKit 3 (`@sveltejs/kit` peer dependency is now `^3.0.0`).
+
+  Add `@chialab/sveltekit-utils/utils/env` with `flag`, `optional`, `required` and `requiredAtRuntime` schema parsers for `defineEnvVars`.
+
+### Patch Changes
+
+- d269b67: Align RedisCache with the BaseCache type and expose a shared child cache contract.
+
 ## 0.4.4
 
 ### Patch Changes
