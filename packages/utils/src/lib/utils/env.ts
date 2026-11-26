@@ -1,5 +1,4 @@
 // Schema parsers for `defineEnvVars` from `@sveltejs/kit/env`.
-import { building } from '$app/env';
 
 /**
  * Boolean flag parser
@@ -24,5 +23,8 @@ export const required = (value: string | undefined): string => {
 
 /**
  * Required string, only enforced when the app runs.
+ * @param value - The environment variable value to parse
+ * @param building - Indicates if the app is currently building. Pass the `building` value from `$app/env`.
  */
-export const requiredAtRuntime = (value: string | undefined): string => (building ? optional(value) : required(value));
+export const requiredAtRuntime = (value: string | undefined, { building }: { building: boolean }): string =>
+	building ? optional(value) : required(value);

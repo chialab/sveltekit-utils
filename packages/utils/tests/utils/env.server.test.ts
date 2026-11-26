@@ -1,12 +1,5 @@
 import { flag, optional, required, requiredAtRuntime } from '#lib/utils/env.js';
-import { describe, expect, it, vi } from 'vitest';
-
-const env = vi.hoisted(() => ({ building: false }));
-vi.mock('$app/env', () => ({
-	get building() {
-		return env.building;
-	},
-}));
+import { describe, expect, it } from 'vitest';
 
 describe(flag.name, () => {
 	it('should parse truthy and falsy values', () => {
@@ -35,11 +28,9 @@ describe(required.name, () => {
 
 describe(requiredAtRuntime.name, () => {
 	it('should skip the check only while building', () => {
-		expect(requiredAtRuntime(' foo ')).to.equal('foo');
-		expect(() => requiredAtRuntime(undefined)).to.throw('Value must not be empty');
+		expect(requiredAtRuntime(' foo ', { building: false })).to.equal('foo');
+		expect(() => requiredAtRuntime(undefined, { building: false })).to.throw('Value must not be empty');
 
-		env.building = true;
-		expect(requiredAtRuntime(undefined)).to.equal('');
-		env.building = false;
+		expect(requiredAtRuntime(undefined, { building: true })).to.equal('');
 	});
 });
