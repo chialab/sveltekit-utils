@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.5.1
+
+### Patch Changes
+
+- 2de5e2f: Export env schema parser utils.
+
 ## 0.5.0
 
 ### Minor Changes
