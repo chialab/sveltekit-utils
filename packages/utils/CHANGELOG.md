@@ -1,5 +1,11 @@
 # @chialab/sveltekit-utils
 
+## 0.5.2
+
+### Patch Changes
+
+- 75a66d4: Building param in `requiredAtRuntime` schema parser util.
+
 ## 0.5.1
 
 ### Patch Changes
