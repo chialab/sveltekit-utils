@@ -1,5 +1,6 @@
 export * from './browser.js';
 export * from './collections.js';
+export * from './env.js';
 export * from './fetch.js';
 export * from './html.js';
 export * from './misc.js';
